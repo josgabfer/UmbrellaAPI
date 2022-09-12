@@ -1,11 +1,8 @@
 import argparse
 import os
 import json
+from Modules.Auth.getToken import getToken
 
-from ConnectionModules.Create_Token import request_Token
-from API_Modules.Umbrella.Monitoring.ReportActivity import ReportActivitySearch, ReportDNSSumary
-from API_Modules.Umbrella.Management.management import RequestIdentities, RequestRoamingClients
-# from API_Modules.Umbrella.Monitoring.tunnelMonitoring import CheckTunnelState
 from datetime import datetime
 
 os.environ["TOKEN"] = "TEST"
@@ -25,14 +22,7 @@ parser.add_argument('-ar','--activity', dest='activity', metavar='',type=str, he
 group = parser.add_mutually_exclusive_group()
 group.add_argument('-S', '--setup', action='store_true', help='Setup the connection settings, it requires an orgainzation ID (-o), a key (-k) and a secret (-s)')
 group.add_argument('-rt', '--requestToken', action='store_true', help='Request a new token')
-group.add_argument('-ra', '--requestActivity', action='store_true', help='Check Report Activity')
-group.add_argument('-rs', '--requestSummary', action='store_true', help='Check DNS Summary information')
-group.add_argument('-ri', '--requestIdentities', action='store_true', help='Check Identities Summary information')
-group.add_argument('-rr', '--requestroamingclients', action='store_true', help='Check Identities Summary information')
-# group.add_argument('-ri', '--requestIdentities', action='store_true', help='Check Identities Summary information')
-group.add_argument('-q', '--query', action='store_true', help='Query the Umbrella\'s API')
-group.add_argument('-ts', '--TunnelState', action='store_true', help='QThis value tells the program to check the current state of the network tunnels')
-group.add_argument('-w', '--write', action='store_true', help='This option will write the information within the DB into an external file (currently in clear text)')
+
 
 
 args = parser.parse_args()
@@ -48,17 +38,9 @@ def setupConnectionSettings():
 
 def main():
     if args.setup:
-        # requestNetworkIdentities()
         print("setup")
-    elif args.requestActivity:
-        ReportActivitySearch()
-    elif args.requestSummary:
-        ReportDNSSumary()
-    elif args.requestIdentities:
-        RequestIdentities()
-    elif args.requestroamingclients:
-        # print("Roaming Clients")
-        RequestRoamingClients()
+    elif args.requestToken:
+        getToken()
     else:
         print(f'Usage: UmbrellaAPI.py [-h] [-o] [-k] [-s] [-n] [-p] [-S | -q | -w | -ct]')
 
