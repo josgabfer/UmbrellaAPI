@@ -6,8 +6,8 @@ import flatdict as flat
 """User variables - can be changed
 path_name: Here you can specify the path and name of the CSV file that we will use to save the output from the GET request.
 delete_columns: Here you can specify the name of the columns that you don't want to appear in the CSV file, for example: delete_columns = ['client.authentication.parameters.modifiedAt']"""
-path_name = r"D:\Python projects\tunnels2.csv"
-delete_columns = ['client.authentication.parameters.modifiedAt', 'client.authentication.type', 'meta', 'uri', 'transport.protocol']
+path_name = r"C:\tunnels.csv"
+delete_columns = []
 
 def get_tunnels ():
     """In this function we will send a GET request to get a list of all the tunnels listed in the Umbrella dashboard.
