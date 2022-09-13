@@ -65,7 +65,12 @@ def generate_token(base64_auth, token_API_Type):
     headers = {
         "Authorization": "Basic " + base64_auth
     }
-    response = requests.request("GET", url, headers = headers)
+    try:
+        response = requests.request("GET", url, headers = headers)
+    except HTTPError as httperror:
+        print(f'HTPP error occured: {httperror}')
+    except Exception as e:
+        print(f'An error has occured : {e}')
     token_json = response.json()
     token = token_json.get('access_token')
     dotenv.set_key(dotenv_file,token_API_Type, token)
