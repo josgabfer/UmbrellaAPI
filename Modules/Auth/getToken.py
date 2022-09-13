@@ -26,6 +26,7 @@ def check_token(token_type):
             D --> Deployments
             P --> Policies
             R --> Reports
+            X --> All or custom API 
         If the token exists, it returns the token to the requester
         If the token does not exists, it calls generate token with the token type
     """
