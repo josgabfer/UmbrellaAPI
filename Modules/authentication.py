@@ -48,6 +48,3 @@ def generate_token():
     return token_response.get("access_token")
 
 
-if (__name__ == "__main__"):
-    """This is a comment"""
-    print('H')
