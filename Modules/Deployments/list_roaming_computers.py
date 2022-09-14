@@ -50,7 +50,7 @@ def RequestRoamingClients(token_type):
     print("\n")
 
     try:
-        print(colored("Requesting the list of roaming computers"),'green')
+        print(colored("Requesting the list of roaming computers",'green'))
         response = requests.request('GET', URL, headers=headers, data = payload)
         if(response.status_code == 401 or response.status_code == 403):
             print("Expired Token, genereting a new one")

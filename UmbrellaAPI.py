@@ -1,5 +1,6 @@
 import argparse
 import os
+from termcolor import colored
 from Modules.Auth.getToken import check_token
 from Modules.Deployments.list_roaming_computers import RequestRoamingClients
 from datetime import datetime
@@ -22,6 +23,7 @@ group = parser.add_mutually_exclusive_group()
 group.add_argument('-S', '--setup', action='store_true', help='Setup the connection settings, it requires an orgainzation ID (-o), a key (-k) and a secret (-s)')
 group.add_argument('-rt', '--request_token', action='store_true', help='Request a new token')
 group.add_argument('-L', '--list', action='store_true', help='Request a new token')
+group.add_argument('-T', '--test', action='store_true', help='Test')
 
 
 
