@@ -1,5 +1,6 @@
 import threading
 from time import sleep
+import datetime 
 from dotenv import load_dotenv
 from pathlib import Path
 import pandas as pd
@@ -53,7 +54,7 @@ def RequestRoamingClients(token_type):
         print(colored("Requesting the list of roaming computers",'green'))
         response = requests.request('GET', URL, headers=headers, data = payload)
         if(response.status_code == 401 or response.status_code == 403):
-            print("Expired Token, genereting a new one")
+            print(colored("Expired Token, genereting a new one",'red'))
             generate_auth_string(token_type)
             t = threading.Thread(target=generate_auth_string(token_type))
             t.start()
@@ -61,13 +62,13 @@ def RequestRoamingClients(token_type):
             t.join()
             RequestRoamingClients(token_type)
         else:
+            print(colored("Success! \nCreating csv file",'green'))
             resp_to_json = response.json()
             clients = pd.DataFrame(resp_to_json)
-            clients.to_csv(r'roaming_clients_list.csv', index=False)
+            file_name = f'roaming_clients_list_{datetime.datetime.now().strftime("%Y-%m-%d")}' + '.csv'
+            clients.to_csv(file_name, index=False)
             
-            
-
     except HTTPError as httperr:
-        print(f'HTPP error occured: {httperr}')
+        print(colored(f'HTPP error occured: {httperr}','red'))
     except Exception as e:
-        print(f'HTPP error occured: {e}')
+        print(colored(f'HTPP error occured: {e}','red'))
