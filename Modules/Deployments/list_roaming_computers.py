@@ -6,6 +6,7 @@ import pandas as pd
 import requests
 import os
 from requests.models import HTTPError
+from termcolor import colored
 import http.client as http_client
 import logging
 from threading import Thread
@@ -28,8 +29,10 @@ def RequestRoamingClients(token_type):
     """ 
         This function will request a list of roaming computers and save it into a csv file for later check
     """
-    if os.getenv(token_type+'_TOKEN') == None:
-        print("Token does not exists... Creating a new one")
+    token = os.getenv(token_type+'_TOKEN')
+    print(colored(token),'yellow')
+    if token == None:
+        print(colored('Token does not exists... Creating a new one', 'red'))
         t = threading.Thread(target=generate_auth_string(token_type))
         t.start()
         sleep(3)
@@ -37,17 +40,17 @@ def RequestRoamingClients(token_type):
         token = os.getenv(token_type+'_TOKEN')
         if os.getenv(token_type+'_TOKEN') == None:
             print("Error while creating or saving token, please check your code")
-    URL="api.umbrella.com/deployments/v2/roamingcomputers"
+    URL="https://api.umbrella.com/deployments/v2/roamingcomputers"
     payload = None
     headers = {
         "Authorization": "Bearer " + token,
         "Accept": "application/json"
     }    
-    print(f"Contacting the API: {URL}")
+    print(colored(f"Contacting the API: {URL}"),'green')
     print("\n")
 
     try:
-        print("Requesting the list of roaming computers")
+        print(colored("Requesting the list of roaming computers"),'green')
         response = requests.request('GET', URL, headers=headers, data = payload)
         if(response.status_code == 401 or response.status_code == 403):
             print("Expired Token, genereting a new one")

@@ -1,0 +1,4 @@
+originId,deviceId,type,status,lastSyncStatus,lastSync,appliedBundle,version,osVersion,osVersionName,name,hasIpBlocking
+584321317,0101C6043386F05E,anyconnect,Encrypted,Encrypted,2022-09-14T14:51:21.000Z,7985994,4.10.5085,Microsoft Windows NT 10.0.19044.0,Windows 10,DESKTOP-76MUP6A,False
+573190514,01012A5BDB8004DD,roaming,VA,VA,2022-09-14T15:08:18.000Z,7985994,3.0.279,Microsoft Windows [Version 10.0.19044.2006],Windows 10,DESKTOP-JMBUQ10,False
+590272814,010188817F51DA9A,roaming,Encrypted,Encrypted,2022-09-14T14:57:19.000Z,13561277,3.0.22,NSMACHOperatingSystem (Version 12.3.1 (Build 21E258)),Mac OS 12.3.1,Jose’s MacBook Pro,False
