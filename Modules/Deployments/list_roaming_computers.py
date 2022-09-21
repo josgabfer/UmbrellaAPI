@@ -21,17 +21,15 @@ requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
 dotenv_path = Path('../Auth/.env')
-load_dotenv()
-
-orgID = os.getenv('ORGID')
 
 
 def RequestRoamingClients(token_type):
     """ 
         This function will request a list of roaming computers and save it into a csv file for later check
     """
+    load_dotenv(override=True)
     token = os.getenv(token_type+'_TOKEN')
-    print(colored(token),'yellow')
+    # print(colored(token),'yellow')
     if token == None:
         print(colored('Token does not exists... Creating a new one', 'red'))
         t = threading.Thread(target=generate_auth_string(token_type))
@@ -55,10 +53,9 @@ def RequestRoamingClients(token_type):
         response = requests.request('GET', URL, headers=headers, data = payload)
         if(response.status_code == 401 or response.status_code == 403):
             print(colored("Expired Token, genereting a new one",'red'))
-            generate_auth_string(token_type)
             t = threading.Thread(target=generate_auth_string(token_type))
             t.start()
-            sleep(3)
+            sleep(5)
             t.join()
             RequestRoamingClients(token_type)
         else:

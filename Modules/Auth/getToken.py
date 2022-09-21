@@ -1,6 +1,7 @@
 import base64
 import requests
 import os
+from termcolor import colored
 from requests.models import HTTPError
 from requests.auth import HTTPBasicAuth
 import http.client as http_client
@@ -50,7 +51,7 @@ def generate_auth_string(token_type):
     base64_bytes = base64.b64encode(message_bytes)
     base64_auth = base64_bytes.decode('ascii')
     token_API_Type = token_type + '_' +'TOKEN'
-
+    print(colored(f'Refreshing token type: {token_API_Type}','yellow'))
 
     generate_token(base64_auth, token_API_Type)
 
@@ -60,6 +61,9 @@ def generate_token(base64_auth, token_API_Type):
         This module will create a new OAUTH2 token for API Queries, more information at:
         https://developer.cisco.com/docs/cloud-security/#!auth-overview
     """
+
+    print(colored(f'Refreshing token for token type: {token_API_Type}','yellow'))
+
     url = "https://api.umbrella.com/auth/v2/token"
     dotenv_file = dotenv.find_dotenv()
     headers = {
@@ -73,4 +77,6 @@ def generate_token(base64_auth, token_API_Type):
         print(f'An error has occured : {e}')
     token_json = response.json()
     token = token_json.get('access_token')
+    print(colored(f'Token created, saving token to .env file: {token}','yellow'))
+
     dotenv.set_key(dotenv_file,token_API_Type, token)

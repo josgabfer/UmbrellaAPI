@@ -1,9 +1,12 @@
 import argparse
 import os
 from termcolor import colored
+from dotenv import dotenv_values
 from Modules.Auth.getToken import check_token
 from Modules.Deployments.list_roaming_computers import RequestRoamingClients
 from datetime import datetime
+import json
+
 
 os.environ["TOKEN"] = "TEST"
 
@@ -45,6 +48,9 @@ def check_token_args(token_type):
 def main():
     if args.setup:
         print("setup")
+    elif args.test:
+        variable = json.dumps(dotenv_values("Modules/Auth/.env"))
+        print (variable['X_TOKEN'])
     elif args.request_token:
         print(args.token_type)
         check_token_args(args.token_type)
