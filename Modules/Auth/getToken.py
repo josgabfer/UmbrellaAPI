@@ -7,6 +7,7 @@ from requests.auth import HTTPBasicAuth
 import http.client as http_client
 import logging
 import dotenv
+from dotenv import dotenv_values, find_dotenv 
 
 
 
@@ -41,9 +42,9 @@ def check_token(token_type):
 
 def generate_auth_string(token_type):
     """Here we encode the API Secret and Key in base64 format needed for the generate_token() function to request an access token."""
-
-    key = os.getenv(token_type+'_'+'KEY')
-    secret = os.getenv(token_type+'_'+'SECRET')
+    config = dotenv_values(find_dotenv())
+    key = config[token_type + '_KEY']
+    secret = config[token_type + '_SECRET']
 
     auth_string = f"{key}:{secret}"
 
@@ -80,3 +81,6 @@ def generate_token(base64_auth, token_API_Type):
     print(colored(f'Token created, saving token to .env file: {token}','yellow'))
 
     dotenv.set_key(dotenv_file,token_API_Type, token)
+
+    return token
+

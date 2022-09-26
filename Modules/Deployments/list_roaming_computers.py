@@ -2,6 +2,7 @@ import threading
 from time import sleep
 import datetime 
 from dotenv import load_dotenv
+from dotenv import dotenv_values, find_dotenv
 from pathlib import Path
 import pandas as pd
 import requests
@@ -20,25 +21,17 @@ requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-dotenv_path = Path('../Auth/.env')
-
-
 def RequestRoamingClients(token_type):
     """ 
         This function will request a list of roaming computers and save it into a csv file for later check
     """
-    load_dotenv(override=True)
-    token = os.getenv(token_type+'_TOKEN')
-    # print(colored(token),'yellow')
+    config = dotenv_values(find_dotenv())
+
+    env_token_type = token_type + '_TOKEN'
+    token = config[env_token_type]
     if token == None:
         print(colored('Token does not exists... Creating a new one', 'red'))
-        t = threading.Thread(target=generate_auth_string(token_type))
-        t.start()
-        sleep(3)
-        t.join()
-        token = os.getenv(token_type+'_TOKEN')
-        if os.getenv(token_type+'_TOKEN') == None:
-            print("Error while creating or saving token, please check your code")
+        token = generate_auth_string(token_type)
     URL="https://api.umbrella.com/deployments/v2/roamingcomputers"
     payload = None
     headers = {
@@ -49,14 +42,11 @@ def RequestRoamingClients(token_type):
     print("\n")
 
     try:
-        print(colored("Requesting the list of roaming computers",'green'))
+        print(colored("Requesting the list of roaming computers","green"))
         response = requests.request('GET', URL, headers=headers, data = payload)
         if(response.status_code == 401 or response.status_code == 403):
-            print(colored("Expired Token, genereting a new one",'red'))
-            t = threading.Thread(target=generate_auth_string(token_type))
-            t.start()
-            sleep(5)
-            t.join()
+            print(colored("Expired Token, genereting a new one","red"))
+            token = generate_auth_string(token_type)
             RequestRoamingClients(token_type)
         else:
             print(colored("Success! \nCreating csv file",'green'))

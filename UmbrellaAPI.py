@@ -2,13 +2,11 @@ import argparse
 import os
 from termcolor import colored
 from dotenv import dotenv_values
+from pathlib import Path
 from Modules.Auth.getToken import check_token
 from Modules.Deployments.list_roaming_computers import RequestRoamingClients
 from datetime import datetime
 import json
-
-
-os.environ["TOKEN"] = "TEST"
 
 
 
@@ -34,7 +32,7 @@ args = parser.parse_args()
 
 def setupConnectionSettings():
     """
-    Calls the API reporting interface to create a token for further use.
+        Calls the API reporting interface to create a token for further use.
         APISettings: Object, stores all the required arguments for a connection to the Umbrella API
         saveConnectionSettings: function in Model.py, this will save the settings in a DB (ConnectionSettings.db) to reuse the settings
     """
@@ -49,8 +47,8 @@ def main():
     if args.setup:
         print("setup")
     elif args.test:
-        variable = json.dumps(dotenv_values("Modules/Auth/.env"))
-        print (variable['X_TOKEN'])
+        config = dotenv_values("Modules/Auth/.env")
+        print(config['X_TOKEN'])
     elif args.request_token:
         print(args.token_type)
         check_token_args(args.token_type)
