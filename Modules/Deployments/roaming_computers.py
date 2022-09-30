@@ -1,17 +1,11 @@
-import threading
-from time import sleep
 import datetime 
-from dotenv import load_dotenv
 from dotenv import dotenv_values, find_dotenv
-from pathlib import Path
 import pandas as pd
 import requests
-import os
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
 import logging
-from threading import Thread
 from ..Auth.getToken import generate_auth_string
 
 http_client.HTTPConnection.debuglevel = 1
