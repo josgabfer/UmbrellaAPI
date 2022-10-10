@@ -6,6 +6,23 @@ from Modules.Auth.getToken import check_token
 from Modules.Deployments.roaming_computers import RequestRoamingClients
 from datetime import datetime
 import json
+import dotenv
+
+
+def setup(args):
+    """Creates the config.json file.
+    This file contains settings like the path to save the reports created by the API, or API name profiles."""
+    dotenv_file = dotenv.find_dotenv()
+    dotenv.load_dotenv(dotenv_file)
+    key_name = args.name + '_TOKEN'
+    secret_name = args.name + '_TOKEN'
+
+    dotenv.set_key(dotenv_file, key_name, args.key)
+    dotenv.set_key(dotenv_file, secret_name, args.secret)
+
+    config = {
+        'Profile':args.name
+    }
 
 
 
@@ -57,6 +74,9 @@ def argument_router(args):
             print('Borrar Policies')
         if args.reports:
             print('Borrar Reportes')
+    elif args.setup:
+        setup(args)
+
     else:
         print(f'Usage: UmbrellaAPI.py [-h] [-o] [-k] [-s] [-n] [-p] [-S | -q | -w | -ct]')
 
@@ -66,16 +86,15 @@ def argument_router(args):
 
 def main():
     parser = argparse.ArgumentParser(description='Umbrella API interface')
-    subparsers = parser.add_subparsers(help='sub-command help')
+    # subparsers = parser.add_subparsers(help='sub-command help')
+    setup_group = parser.add_argument_group('setup')
+    setup_group.add_argument('-n','--name', dest='name', metavar='',type=str, help='Use with the Key and the Secret to create a new profile or login for the Umbrella API')
+    setup_group.add_argument('-k','--key', dest='key',metavar='', type=str, help='This value is the key created from your Umbrella Dashboard')
+    setup_group.add_argument('-s','--secret', dest='secret', metavar='',type=str, help='This value stores the secret created from your Umbrella Dashboard')
+    setup_group.add_argument('-p','--path', dest='path', metavar='',type=str, help='This value instructs the program where to save the the files or reports you create')
 
-    #Auth options
-    # auth_parser = subparsers.add_parser(help='Authentication Module help')
-    # parser.add_argument('-k','--key', dest='key',metavar='', type=str, help='This value is the key created from your Umbrella Dashboard')
-    # parser.add_argument('-s','--secret', dest='secret', metavar='',type=str, help='This value stores the secret created from your Umbrella Dashboard')
-    # parser.add_argument('-n','--name', dest='name', metavar='',type=str, help='This value represents the new credentials for the connection')
-    # parser.add_argument('-t','--token-type', dest='token_type', metavar='',type=str, help='This argument requires an option to set the token type, either (A: Admin, D: Deployments, P: Policies, R: Reports, X: Custom)')
-    # parser.add_argument('-l','--list', action='store_true', help='The list operator, it should be used with the Aut, Admin, Deoployment, Policies or Reports module')
-    # parser.add_argument('-r','--roaming', action='store_true', help='The roaming operator, access  ')
+
+
 
     module_group = parser.add_mutually_exclusive_group(required=True)
     module_group.add_argument('-AU', '--auth', action='store_true', help='Access Authentication module options [-c --> Create, -r --> read, -u --> update, l --> list]')
@@ -83,15 +102,16 @@ def main():
     module_group.add_argument('-D', '--deployments', action='store_true', help='Access Deployments module options[-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-P', '--policies', action='store_true', help='Access Policy module options[-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-R', '--reports', action='store_true', help='Access Report module options[l --> list]')
+    module_group.add_argument('-S', '--setup', action='store_true', help='Access the setup module to create the config file')
 
-    action_group = parser.add_mutually_exclusive_group(required=True)
+    action_group = parser.add_mutually_exclusive_group(required=False)
     action_group.add_argument('-c','--create', action='store_true', help='The create action operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
-    action_group.add_argument('-l','--list', action='store_true', help='The list action operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
+    action_group.add_argument('-l','--list', action='store_true', help='The list action operator, it should be used with the Auth, Admin, Deployment, Policies or Reports module')
     action_group.add_argument('-u','--update', action='store_true', help='The update action operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     action_group.add_argument('-d','--delete', action='store_true', help='The delete action operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
 
 
-    deployment_group = parser.add_mutually_exclusive_group(required=True)
+    deployment_group = parser.add_mutually_exclusive_group(required=False)
     deployment_group.add_argument('-r','--roaming', action='store_true', help='The roaming deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     args = parser.parse_args()
 
