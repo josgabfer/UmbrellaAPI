@@ -3,7 +3,8 @@ import os
 from termcolor import colored
 from pathlib import Path
 from Modules.Auth.getToken import check_token
-from Modules.Deployments.roaming_computers import RequestRoamingClients
+from Modules.Deployments.roaming_computers import RequestRoamingClients 
+from Modules.Deployments.list_tunnels import  get_tunnels
 from datetime import datetime
 import json
 import dotenv
@@ -48,6 +49,8 @@ def argument_router(args):
         if args.deployments:
             if args.roaming:
                 RequestRoamingClients('X')
+            if args.tunnel:
+                get_tunnels('X')
         if args.policies:
             print('Listar Policies')
         if args.reports:
@@ -113,6 +116,7 @@ def main():
 
     deployment_group = parser.add_mutually_exclusive_group(required=False)
     deployment_group.add_argument('-r','--roaming', action='store_true', help='The roaming deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
+    deployment_group.add_argument('-t','--tunnel', action='store_true', help='The tunnel deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     args = parser.parse_args()
 
     argument_router(args)
