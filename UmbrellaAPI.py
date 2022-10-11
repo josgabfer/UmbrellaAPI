@@ -61,6 +61,8 @@ def argument_router(args):
                 RequestRoamingClients(args.profile)
             if args.tunnel:
                 get_tunnels(args.profile)
+            if args.networks:
+                get_networks(args.profile)
         if args.policies:
             print('Listar Policies')
         if args.reports:
