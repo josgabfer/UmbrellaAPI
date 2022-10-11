@@ -17,8 +17,7 @@ def setup(args):
 
     dotenv_file = dotenv.find_dotenv()
     dotenv.load_dotenv(dotenv_file)
-    print(args)
-
+    
     if not args.name:
         if args.path:
             dotenv.set_key(dotenv_file, 'PATH', args.path)
