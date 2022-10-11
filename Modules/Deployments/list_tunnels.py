@@ -9,38 +9,22 @@ import http.client as http_client
 import logging
 import flatdict as flat
 
+http_client.HTTPConnection.debuglevel = 1
+logging.basicConfig()
+logging.getLogger().setLevel(logging.DEBUG)
+requests_log = logging.getLogger("requests.packages.urllib3")
+requests_log.setLevel(logging.DEBUG)
+requests_log.propagate = True
+
 """User variables - can be changed
-path_name: Here you can specify the path and name of the CSV file that we will use to save the output from the GET request.
-delete_columns: Here you can specify the name of the colum2ns that you don't want to appear in the CSV file, for example: delete_columns = ['client.authentication.parameters.modifiedAt']"""
+path            : Location where the file will be saved. Must end with '\\'
+file_name       : By default the script will use the next Format: tunnel_list_<year>-<month>-<day>.csv
+delete_columns  : List of columns to be removed from the CSV file. Example: delete_columns = ['client.authentication.parameters.modifiedAt']"""
 path = "C:\\"
+file_name = f'tunnel_list_{datetime.datetime.now().strftime("%Y-%m-%d")}' + '.csv'
 delete_columns = []
 
-def parse_tunnels(tunnels_json):
-    try:
-        for item in range(len(tunnels_json)):
-            tunnels_json[item] = flat.FlatDict(tunnels_json[item], '.')
-            if delete_columns:
-                for delete in delete_columns:
-                    tunnels_json[item].pop(delete)
-        tunnel_list = pandas.DataFrame(tunnels_json)
-        file_name = f'tunnel_list_{datetime.datetime.now().strftime("%Y-%m-%d")}' + '.csv'
-        tunnel_list.to_csv(path + file_name, index=False)
-        
-        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
-    except(AttributeError):
-        print(colored("Failed to convert GET response to CSV. Check if the API Path defined in variable 'url' is correct.", "red"))
-    except(PermissionError):
-        print(colored ("""Failed to save the CSV file. Check if a valid path and file name were saved in the variable 'path_name'.
-Make sure you don't have an opened CSV file with the same name in the same path defined in the variable 'path_name'.""", "red"))
-    except(KeyError):
-        print(colored("Failed to delete the columns specified in 'delete_columns'. Make sure there are no typos in the columns' names stored in 'delete_columns'", "red"))
-    except:
-        print(colored('Unexpected Error.', "red"))
-        
-    
-
 def get_tunnels(token_type):
-
     config = dotenv_values(find_dotenv())
     env_token_type = token_type + '_TOKEN'
     token = config.get(env_token_type)
@@ -73,5 +57,25 @@ def get_tunnels(token_type):
     except Exception as e:
         print(colored(f'HTPP error occured: {e}','red'))
 
-if (__name__ == "__main__"):
-    get_tunnels("X")
+def parse_tunnels(tunnels_json):
+    try:
+        for item in range(len(tunnels_json)):
+            tunnels_json[item] = flat.FlatDict(tunnels_json[item], '.')
+            if delete_columns:
+                for delete in delete_columns:
+                    tunnels_json[item].pop(delete)
+        tunnel_list = pandas.DataFrame(tunnels_json)
+        
+        tunnel_list.to_csv(path + file_name, index=False)
+        
+        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+    except(AttributeError):
+        print(colored("Failed to convert GET response to CSV. Check if the API Path defined in variable 'url' is correct.", "red"))
+    except(PermissionError):
+        print(colored ("""Failed to save the CSV file. You might be trying to overwrite the file while is already open or the path stored in variable 'path' is invalid.""", "red"))
+    except(KeyError):
+        print(colored("Failed to delete the columns specified in 'delete_columns'. Make sure there are no typos in the columns' names stored in 'delete_columns'", "red"))
+    except:
+        print(colored('Unexpected Error.', "red"))
+        
+

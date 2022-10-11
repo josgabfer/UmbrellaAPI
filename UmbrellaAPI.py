@@ -5,6 +5,7 @@ from pathlib import Path
 from Modules.Auth.getToken import check_token
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
 from Modules.Deployments.list_tunnels import  get_tunnels
+from Modules.Deployments.list_networks import get_networks
 from datetime import datetime
 from dotenv import dotenv_values 
 import dotenv
@@ -127,6 +128,7 @@ def main():
     deployment_group = parser.add_mutually_exclusive_group(required=False)
     deployment_group.add_argument('-r','--roaming', action='store_true', help='The roaming deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-t','--tunnel', action='store_true', help='The tunnel deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
+    deployment_group.add_argument('-nw','--networks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
     args = parser.parse_args()
 
     argument_router(args)
