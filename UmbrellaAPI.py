@@ -14,15 +14,22 @@ import dotenv
 def setup(args):
     """Creates the config.json file.
     This file contains settings like the path to save the reports created by the API, or API name profiles."""
+
     dotenv_file = dotenv.find_dotenv()
     dotenv.load_dotenv(dotenv_file)
-    key_name = args.name + '_KEY'
-    secret_name = args.name + '_SECRET'
-    profile_name = 'PROFILE_' + args.name
+    print(args)
 
-    dotenv.set_key(dotenv_file, profile_name, args.name)
-    dotenv.set_key(dotenv_file, key_name, args.key)
-    dotenv.set_key(dotenv_file, secret_name, args.secret)
+    if not args.name:
+        if args.path:
+            dotenv.set_key(dotenv_file, 'PATH', args.path)
+    else:
+        key_name = args.name + '_KEY'
+        secret_name = args.name + '_SECRET'
+        profile_name = 'PROFILE_' + args.name
+
+        dotenv.set_key(dotenv_file, profile_name, args.name)
+        dotenv.set_key(dotenv_file, key_name, args.key)
+        dotenv.set_key(dotenv_file, secret_name, args.secret)
 
 
 def check_profile(profile):
