@@ -6,7 +6,7 @@ from Modules.Auth.getToken import check_token
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
 from Modules.Deployments.list_tunnels import  get_tunnels
 from datetime import datetime
-import json
+from dotenv import dotenv_values 
 import dotenv
 
 
@@ -15,15 +15,24 @@ def setup(args):
     This file contains settings like the path to save the reports created by the API, or API name profiles."""
     dotenv_file = dotenv.find_dotenv()
     dotenv.load_dotenv(dotenv_file)
-    key_name = args.name + '_TOKEN'
-    secret_name = args.name + '_TOKEN'
+    key_name = args.name + '_KEY'
+    secret_name = args.name + '_SECRET'
+    profile_name = 'PROFILE_' + args.name
 
+    dotenv.set_key(dotenv_file, profile_name, args.name)
     dotenv.set_key(dotenv_file, key_name, args.key)
     dotenv.set_key(dotenv_file, secret_name, args.secret)
 
-    config = {
-        'Profile':args.name
-    }
+
+def check_profile(profile):
+    """This function will check if the profile exists or not, depending on what is entered by the user"""
+    dotenv.load_dotenv()
+    config = dotenv_values()
+    
+    if profile in config.values():
+        return True
+    else:
+        return False
 
 
 
@@ -48,9 +57,9 @@ def argument_router(args):
             print('Listar Admin')
         if args.deployments:
             if args.roaming:
-                RequestRoamingClients('X')
+                RequestRoamingClients(args.profile)
             if args.tunnel:
-                get_tunnels('X')
+                get_tunnels(args.profile)
         if args.policies:
             print('Listar Policies')
         if args.reports:
@@ -79,7 +88,6 @@ def argument_router(args):
             print('Borrar Reportes')
     elif args.setup:
         setup(args)
-
     else:
         print(f'Usage: UmbrellaAPI.py [-h] [-o] [-k] [-s] [-n] [-p] [-S | -q | -w | -ct]')
 
@@ -94,7 +102,9 @@ def main():
     setup_group.add_argument('-n','--name', dest='name', metavar='',type=str, help='Use with the Key and the Secret to create a new profile or login for the Umbrella API')
     setup_group.add_argument('-k','--key', dest='key',metavar='', type=str, help='This value is the key created from your Umbrella Dashboard')
     setup_group.add_argument('-s','--secret', dest='secret', metavar='',type=str, help='This value stores the secret created from your Umbrella Dashboard')
-    setup_group.add_argument('-p','--path', dest='path', metavar='',type=str, help='This value instructs the program where to save the the files or reports you create')
+    setup_group.add_argument('-De','--des', dest='des', metavar='',type=str, help='This value stores the description of a given profile created.')
+    setup_group.add_argument('-Pa','--path', dest='path', metavar='',type=str, help='This value instructs the program where to save the the files or reports you create')
+    setup_group.add_argument('-p','--profile', dest='profile', metavar='',type=str, help='This value tells the program what profile to use, if not entered, the system will use the default profile')
 
 
 

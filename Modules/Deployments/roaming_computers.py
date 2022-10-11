@@ -20,12 +20,14 @@ def RequestRoamingClients(token_type):
         This function will request a list of roaming computers and save it into a csv file for later check
     """
     config = dotenv_values(find_dotenv())
-
+    token =""
     env_token_type = token_type + '_TOKEN'
-    token = config[env_token_type]
-    if token == None:
+    if not env_token_type in config:
         print(colored('Token does not exists... Creating a new one', 'red'))
-        token = generate_auth_string(token_type)
+        generate_auth_string(token_type)
+        config = dotenv_values(find_dotenv())
+        token = config[env_token_type]
+
     URL="https://api.umbrella.com/deployments/v2/roamingcomputers"
     payload = None
     headers = {

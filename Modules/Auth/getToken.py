@@ -17,7 +17,7 @@ logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
-dotenv.load_dotenv()
+# dotenv.load_dotenv()
 
 
 def check_token(token_type):
@@ -32,13 +32,11 @@ def check_token(token_type):
         If the token exists, it returns the token to the requester
         If the token does not exists, it calls generate token with the token type
     """
-
-    token = token_type + '_' +'TOKEN'
-    if os.getenv(token) != None:
-        print('Token already exists')
-        return os.getenv(token)
+    config = dotenv_values(find_dotenv())
+    if token_type + '_TOKEN' in config:
+        return True
     else:
-        generate_auth_string(token_type)
+        return False
 
 def generate_auth_string(token_type):
     """Here we encode the API Secret and Key in base64 format needed for the generate_token() function to request an access token."""
