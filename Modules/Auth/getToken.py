@@ -51,7 +51,9 @@ def generate_auth_string(token_type):
     base64_auth = base64_bytes.decode('ascii')
     token_API_Type = token_type + '_' +'TOKEN'
 
-    generate_token(base64_auth, token_API_Type)
+    # generate_token(base64_auth, token_API_Type)
+    return (generate_token(base64_auth, token_API_Type))
+    
 
 
 def generate_token(base64_auth, token_API_Type):
