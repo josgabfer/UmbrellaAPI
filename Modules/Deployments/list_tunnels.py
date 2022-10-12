@@ -37,7 +37,7 @@ def get_tunnels(token_type):
             "Authorization": "Bearer " + token,
             "Content-Type": "application/json"
         }
-    print(colored(f"Contacting API: {url}"), 'green')
+    print(colored(f"Contacting API: {url}", 'green'))
     print("\n")
 
     try:
@@ -79,3 +79,5 @@ def parse_tunnels(tunnels_json):
         print(colored('Unexpected Error.', "red"))
         
 
+if __name__ == "__main__":
+    get_tunnels()
