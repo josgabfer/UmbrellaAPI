@@ -24,9 +24,7 @@ def RequestRoamingClients(token_type):
     env_token_type = token_type + '_TOKEN'
     if not env_token_type in config:
         print(colored('Token does not exists... Creating a new one', 'red'))
-        generate_auth_string(token_type)
-        config = dotenv_values(find_dotenv())
-        token = config[env_token_type]
+        token = generate_auth_string(token_type)
 
     URL="https://api.umbrella.com/deployments/v2/roamingcomputers"
     payload = None
