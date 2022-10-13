@@ -18,7 +18,21 @@ def setup(args):
 
     dotenv_file = dotenv.find_dotenv()
     dotenv.load_dotenv(dotenv_file)
-    
+    if args.config:
+        config = dotenv_values()
+        res = [val for key, val in config.items() if 'PROFILE' in key]
+        print(colored('+++++++Profiles+++++++','green'))
+        for val in res:
+            print('Profile: ', val)
+        res = [val for key, val in config.items() if 'PATH' in key]
+        print(colored('+++++++Paths+++++++','green'))
+
+        for val in res:
+            print('Path: ', val)
+
+        
+
+
     if not args.name:
         if args.path:
             dotenv.set_key(dotenv_file, 'PATH', args.path)
@@ -100,7 +114,7 @@ def argument_router(args):
     elif args.setup:
         setup(args)
     else:
-        print(f'Usage: UmbrellaAPI.py [-h] [-o] [-k] [-s] [-n] [-p] [-S | -q | -w | -ct]')
+        print(colored('Argument not recognize, use "UmbrellaAPI.py -h" for more information','yellow'))
 
 
 
@@ -116,17 +130,18 @@ def main():
     setup_group.add_argument('-De','--des', dest='des', metavar='',type=str, help='This value stores the description of a given profile created.')
     setup_group.add_argument('-Pa','--path', dest='path', metavar='',type=str, help='This value instructs the program where to save the the files or reports you create')
     setup_group.add_argument('-p','--profile', dest='profile', metavar='',type=str, help='This value tells the program what profile to use, if not entered, the system will use the default profile')
+    setup_group.add_argument('-Co','--config', action='store_true', help='The config argument let\'s you see the configured profiles and paths saved into the .env file')
 
 
 
 
     module_group = parser.add_mutually_exclusive_group(required=True)
-    module_group.add_argument('-AU', '--auth', action='store_true', help='Access Authentication module options [-c --> Create, -r --> read, -u --> update, l --> list]')
-    module_group.add_argument('-AD', '--admin', action='store_true', help='Access Admin module options[-c --> Create, -r --> read, -u --> update, l --> list]')
-    module_group.add_argument('-D', '--deployments', action='store_true', help='Access Deployments module options[-c --> Create, -r --> read, -u --> update, l --> list]')
-    module_group.add_argument('-P', '--policies', action='store_true', help='Access Policy module options[-c --> Create, -r --> read, -u --> update, l --> list]')
-    module_group.add_argument('-R', '--reports', action='store_true', help='Access Report module options[l --> list]')
-    module_group.add_argument('-S', '--setup', action='store_true', help='Access the setup module to create the config file')
+    module_group.add_argument('-AU', '--auth', action='store_true', help='Access Authentication module options, use with action arguments [-c --> Create, -r --> read, -u --> update, l --> list]')
+    module_group.add_argument('-AD', '--admin', action='store_true', help='Access Admin module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
+    module_group.add_argument('-D', '--deployments', action='store_true', help='Access Deployments module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
+    module_group.add_argument('-P', '--policies', action='store_true', help='Access Policy module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
+    module_group.add_argument('-R', '--reports', action='store_true', help='Access Report module options, use with action arguments[l --> list]')
+    module_group.add_argument('-S', '--setup', action='store_true', help='Access the setup module, use with action arguments (see setup options)')
 
     action_group = parser.add_mutually_exclusive_group(required=False)
     action_group.add_argument('-c','--create', action='store_true', help='The create action operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
