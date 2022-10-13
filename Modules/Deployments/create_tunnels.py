@@ -4,29 +4,32 @@ from dotenv import dotenv_values, find_dotenv
 import requests
 from requests.models import HTTPError
 from termcolor import colored
-"""import http.client as http_client
-import logging"""
+import http.client as http_client
+import logging
 import csv
 import json
 
-"""
+
 http_client.HTTPConnection.debuglevel = 1
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
 requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
-"""
 
-#*** script variables - do not change! ***
+
+# Script variables, must not be changed
 date = datetime.datetime.now()
 timestamp = date.strftime('_%Y_%m_%d_%H_%M')
 lines = ['tunnelName,deviceType,tunnelID,tunnelkey,umbrellaID,status,error,tunnelCreatedAt\n']
 
-#*** user variables - you may change :) ***
-debug = False
-logfile = 'C:\\Testing\\createTunnelsLog'+str(timestamp)+'.csv'
-tunnels_list = 'C:\\Testing\\tunnelinfo.csv'
+"""
+User variables - can be changed
+logfile         : Specify the path and name of the log file. Default name: createTunnelsLog_<year>_<month>_<day>_<hour>_<minute>.csv
+tunnels_list    : Location and name of the CSV file that contains the information of the tunnels that will be created in the Umbrella dashboard
+"""
+logfile = 'C:\\createTunnelsLog'+str(timestamp)+'.csv'
+tunnels_list = 'C:\\tunnelinfo.csv'
 
 def csvToJson(tunnels_list):
     json_array = []
@@ -70,7 +73,7 @@ def postTunnel(token_type, tunnel):
         if (response.status_code == 401 or response.status_code == 403):
             print(colored("Token has expired. Generating new token", "red"))
             token = generate_auth_string(token_type)
-            postTunnel(token_type, tunnel)
+            return (postTunnel(token_type, tunnel))
         elif (response.status_code == 400 or response.status_code == 409):
             error = response.json()
             print(colored(f"Failed to add tunnel: '{tunnel['tunnelname']}' \nReason: {error.get('error')}", 'red'))
@@ -111,4 +114,4 @@ def create_tunnels(token_type):
         logFile.writelines(lines)
 
 if __name__  == "__main__":
-    create_tunnels("UNIVERSAL")
+    create_tunnels("")

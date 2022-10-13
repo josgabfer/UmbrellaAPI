@@ -6,6 +6,7 @@ from Modules.Auth.getToken import check_token
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
 from Modules.Deployments.list_tunnels import  get_tunnels
 from Modules.Deployments.list_networks import get_networks
+from Modules.Deployments.create_tunnels import create_tunnels
 from datetime import datetime
 from dotenv import dotenv_values 
 import dotenv
@@ -52,7 +53,8 @@ def argument_router(args):
         if args.admin:
             print('Crear Admin')
         if args.deployments:
-            print('Crear Deployments')
+            if args.tunnel:
+                create_tunnels(args.profile)
         if args.policies:
             print('Crear Policies')
         if args.reports:
