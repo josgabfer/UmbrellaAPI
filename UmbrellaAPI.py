@@ -17,7 +17,21 @@ def setup(args):
 
     dotenv_file = dotenv.find_dotenv()
     dotenv.load_dotenv(dotenv_file)
-    
+    if args.config:
+        config = dotenv_values()
+        res = [val for key, val in config.items() if 'PROFILE' in key]
+        print(colored('+++++++Profiles+++++++','green'))
+        for val in res:
+            print('Profile: ', val)
+        res = [val for key, val in config.items() if 'PATH' in key]
+        print(colored('+++++++Paths+++++++','green'))
+
+        for val in res:
+            print('Path: ', val)
+
+        
+
+
     if not args.name:
         if args.path:
             dotenv.set_key(dotenv_file, 'PATH', args.path)
@@ -114,6 +128,7 @@ def main():
     setup_group.add_argument('-De','--des', dest='des', metavar='',type=str, help='This value stores the description of a given profile created.')
     setup_group.add_argument('-Pa','--path', dest='path', metavar='',type=str, help='This value instructs the program where to save the the files or reports you create')
     setup_group.add_argument('-p','--profile', dest='profile', metavar='',type=str, help='This value tells the program what profile to use, if not entered, the system will use the default profile')
+    setup_group.add_argument('-Co','--config', action='store_true', help='The config argument let\'s you see the configured profiles and paths saved into the .env file')
 
 
 
