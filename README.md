@@ -50,7 +50,7 @@ python UmbrellaAPI.py -D -l -r -p {Profile-Name}
 
 python UmbrellaAPI.py -D -c -t -p <profile>
 
-# -c ss the create action operator.
+# -c is the create action operator.
 # -t is the tunnel argument
 # -p is the API profile.
 
