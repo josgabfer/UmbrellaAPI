@@ -18,10 +18,10 @@ requests_log.propagate = True
 
 """User variables - can be changed
 path            : Location where the file will be saved. Must end with '\\'
-file_name       : By default the script will use the next Format: networks_list_<year>-<month>-<day>.csv
+file_name       : By default the script will use the next Format: networks_list_<year>-<month>-<day>-<hour>-<minute>.csv
 entry_limit     : Integer value, here we specify the number of records to be saved in the CSV file."""
 path = "C:\\"
-file_name = f'networks_list_{datetime.datetime.now().strftime("%Y-%m-%d")}' + '.csv'
+file_name = f'networks_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 entry_limit = 1500
 
 def get_networks(token_type):

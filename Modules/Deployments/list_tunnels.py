@@ -18,10 +18,10 @@ requests_log.propagate = True
 
 """User variables - can be changed
 path            : Location where the file will be saved. Must end with '\\'
-file_name       : By default the script will use the next Format: tunnel_list_<year>-<month>-<day>.csv
+file_name       : By default the script will use the next Format: tunnel_list_<year>-<month>-<day>-<hour>-<minute>.csv
 delete_columns  : List of columns to be removed from the CSV file. Example: delete_columns = ['client.authentication.parameters.modifiedAt']"""
 path = "C:\\"
-file_name = f'tunnel_list_{datetime.datetime.now().strftime("%Y-%m-%d")}' + '.csv'
+file_name = f'tunnel_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 delete_columns = []
 
 def get_tunnels(token_type):
