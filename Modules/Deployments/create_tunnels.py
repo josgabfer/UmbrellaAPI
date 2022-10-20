@@ -28,8 +28,23 @@ User variables - can be changed
 logfile         : Specify the path and name of the log file. Default name: createTunnelsLog_<year>_<month>_<day>_<hour>_<minute>.csv
 tunnels_list    : Location and name of the CSV file that contains the information of the tunnels that will be created in the Umbrella dashboard
 """
-logfile = 'C:\\createTunnelsLog'+str(timestamp)+'.csv'
-tunnels_list = 'C:\\tunnelinfo.csv'
+
+# logfile = 'C:\\createTunnelsLog'+str(timestamp)+'.csv'
+# tunnels_list = 'C:\\tunnelinfo.csv'
+
+def getPath():
+    with open ("config.json","r") as file:
+        config = json.load(file)
+    jsonlogdata = json.dumps(json.dumps(config['LOGFILES']['PATH']))
+    cleanlogdata = json.loads(jsonlogdata)
+    logfile = cleanlogdata.replace('"','') + 'CREATE_TUNNELS.csv'
+
+    jsonConfData = json.dumps(json.dumps(config['CONFILES']['PATH']))
+    cleanConfData = json.loads(jsonConfData)
+    confile = cleanConfData.replace('"','') + 'tunnelinfo.csv'
+    filesArr = {'LOG':logfile, 'CONF':confile}
+    return filesArr
+
 
 def csvToJson(tunnels_list):
     json_array = []
@@ -105,6 +120,9 @@ def writeTunnelAttributes(response,tunnel,lines):
     return lines
 
 def create_tunnels(token_type):
+    files = getPath()
+    tunnels_list = files['CONF']
+    logfile = files['LOG']
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
         tunnels = csvToJson(tunnels_list)
         for tunnel in tunnels:

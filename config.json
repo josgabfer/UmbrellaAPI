@@ -1,0 +1,20 @@
+{
+    "LOGFILES": {
+        "PATH":"/Users/jduartef/Documents/Reports/Umbrella_Reports",
+        "DEPLOYMENTS": "DEPLOYMENT",
+        "ADMIN": "ADMIN",
+        "POLICIES":"POLICIES",
+        "AUTH":"AUTH",
+        "POLICIES":"POLICIES",
+        "REPORTS":"REPORTS"
+    },
+    "CONFILES":{
+        "PATH":"/Users/jduartef/Documents/Reports/Umbrella_Conf",
+        "DEPLOYMENTS": "DEPLOYMENT",
+        "ADMIN": "ADMIN",
+        "POLICIES":"POLICIES",
+        "AUTH":"AUTH",
+        "POLICIES":"POLICIES",
+        "REPORTS":"REPORTS"
+    }
+}
