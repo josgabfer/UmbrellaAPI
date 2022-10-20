@@ -69,7 +69,7 @@ def argument_router(args):
             print('Crear Admin')
         if args.deployments:
             if args.tunnel:
-                create_tunnels()
+                create_tunnels(args.profile)
         if args.policies:
             print('Crear Policies')
         if args.reports:

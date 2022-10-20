@@ -37,7 +37,7 @@ def getPath():
         config = json.load(file)
     jsonlogdata = json.dumps(json.dumps(config['LOGFILES']['PATH']))
     cleanlogdata = json.loads(jsonlogdata)
-    logfile = cleanlogdata.replace('"','') + 'CREATE_TUNNELS.csv'
+    logfile = cleanlogdata.replace('"','') + 'CREATE_TUNNELS_' + str(timestamp) + ".csv"
 
     jsonConfData = json.dumps(json.dumps(config['CONFILES']['PATH']))
     cleanConfData = json.loads(jsonConfData)
