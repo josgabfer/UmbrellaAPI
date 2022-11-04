@@ -2,3 +2,4 @@
 *.env
 UmbrellaENV/
 *.csv
+*.json
