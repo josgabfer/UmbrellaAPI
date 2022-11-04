@@ -71,15 +71,20 @@ def generate_token(base64_auth, token_API_Type):
     }
     try:
         response = requests.request("GET", url, headers = headers)
+
+        if response.status_code == 401 or response.status_code == 403:
+            print(colored(f'Invalid credentials, please update the credentials for profile {token_API_Type}','red'))
+            quit()
+
+        else:
+            token_json = response.json()
+            token = token_json.get('access_token')
+            dotenv.set_key(dotenv_file,token_API_Type, token)
+            return token
+
     except HTTPError as httperror:
         print(f'HTPP error occured: {httperror}')
     except Exception as e:
         print(f'An error has occured : {e}')
-    token_json = response.json()
-    token = token_json.get('access_token')
     print(colored('Token created, saving token to .env file','yellow'))
-
-    dotenv.set_key(dotenv_file,token_API_Type, token)
-
-    return token
 

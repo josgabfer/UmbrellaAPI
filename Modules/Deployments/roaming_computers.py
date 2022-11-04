@@ -20,8 +20,8 @@ def RequestRoamingClients(token_type):
         This function will request a list of roaming computers and save it into a csv file for later check
     """
     config = dotenv_values(find_dotenv())
-    token =""
     env_token_type = token_type + '_TOKEN'
+    token = config.get(env_token_type)
     if not env_token_type in config:
         print(colored('Token does not exists... Creating a new one', 'red'))
         token = generate_auth_string(token_type)

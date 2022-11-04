@@ -11,6 +11,7 @@ from Modules.Deployments.create_tunnels import create_tunnels
 from datetime import datetime
 from dotenv import dotenv_values 
 import dotenv
+import json
 
 
 def setup(args):
@@ -62,6 +63,16 @@ def check_profile(profile):
 
 def argument_router(args):
     """This function will read the arguments entered, and redirect to any given module as required"""
+    if args.profile == None:
+        print(colored("Entra","red"))
+        with open ("config.json","r") as file:
+            config = json.load(file)
+        jsondumpsprofile = json.dumps(json.dumps(config['DEFAULT_PROFILE']))
+        jsonloadprofile = json.loads(jsondumpsprofile)
+        cleandata = jsonloadprofile.replace('"','')
+        args.profile = cleandata
+        print(args.profile)
+
     if args.create:
         if args.auth:
             print('Crear Auth')
