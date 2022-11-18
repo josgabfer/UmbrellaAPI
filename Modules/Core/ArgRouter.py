@@ -1,7 +1,9 @@
 from pathlib import Path
 from Modules.Auth.getToken import check_token
 from datetime import datetime
-from dotenv import dotenv_values 
+from dotenv import dotenv_values
+from getpass import getpass
+import hashlib
 import dotenv
 import json
 from termcolor import colored
@@ -10,6 +12,23 @@ from Modules.Deployments.list_networks import get_networks
 from Modules.Deployments.create_tunnels import create_tunnels
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
 
+
+def hasPassword():
+    """Creates a hash if password protected profiles are created"""
+    count = 0
+    salt = "IamyourFath3r"
+    p = getpass('Enter your password:\n')
+    p2 = getpass('Re-enter your password:\n')
+    if not p == p2:
+        print(colored('Passwords do not match, please try again\n','red'))
+        count =+ 1
+        if count == 5:
+            print(colored('Exiting...','red'))
+        hasPassword()
+    else:
+        password = p + salt
+        hashed = hashlib.md5(password.encode())
+        return hashed
 
 def setup(args):
     """Creates the config.json file.
@@ -33,13 +52,28 @@ def setup(args):
         if args.path:
             dotenv.set_key(dotenv_file, 'PATH', args.path)
     else:
-        key_name = args.name + '_KEY'
-        secret_name = args.name + '_SECRET'
-        profile_name = 'PROFILE_' + args.name
+        question = input("Would you like to protect this profile with a password?\n Y?\n N?\n")
+        if question == 'Y' or question == 'y':
+            key_name = args.name + '_KEY'
+            secret_name = args.name + '_SECRET'
+            profile_name = 'PROFILE_' + args.name
+            creds_name = args.name + '_PASSW'
+            passw = hasPassword()
+            dotenv.set_key(dotenv_file, profile_name, args.name)
+            dotenv.set_key(dotenv_file, key_name, args.key)
+            dotenv.set_key(dotenv_file, secret_name, args.secret)
+            dotenv.set_key(dotenv_file, creds_name, passw.hexdigest())
+            print(colored('Succesfully created a new protected profile','green'))
+        else:
+            key_name = args.name + '_KEY'
+            secret_name = args.name + '_SECRET'
+            profile_name = 'PROFILE_' + args.name
 
-        dotenv.set_key(dotenv_file, profile_name, args.name)
-        dotenv.set_key(dotenv_file, key_name, args.key)
-        dotenv.set_key(dotenv_file, secret_name, args.secret)
+            dotenv.set_key(dotenv_file, profile_name, args.name)
+            dotenv.set_key(dotenv_file, key_name, args.key)
+            dotenv.set_key(dotenv_file, secret_name, args.secret)
+            print(colored('Succesfully created a new profile','green'))
+
 
 
 def check_profile(profile):
@@ -91,6 +125,8 @@ def argument_router(args):
                 get_tunnels(args.profile)
             if args.networks:
                 get_networks(args.profile)
+            if args.test:
+                hasPassword()
         if args.policies:
             print('Listar Policies')
         if args.reports:

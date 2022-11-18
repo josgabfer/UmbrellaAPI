@@ -163,6 +163,7 @@ def main():
     deployment_group.add_argument('-r','--roaming', action='store_true', help='The roaming deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-t','--tunnel', action='store_true', help='The tunnel deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-nw','--networks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
+    deployment_group.add_argument('-Te','--test', action='store_true', help='test')    
     args = parser.parse_args()
 
     argument_router(args)
