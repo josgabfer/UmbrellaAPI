@@ -1,13 +1,12 @@
 import argparse
 import os
 from termcolor import colored
-from pathlib import Path
 from Modules.Auth.getToken import check_token
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
 from Modules.Deployments.list_tunnels import  get_tunnels
 from Modules.Deployments.list_networks import get_networks
 from Modules.Deployments.create_tunnels import create_tunnels
-# from Modules.Deployments.create_tunnels import getPath
+from Modules.Core.ArgRouter import argument_router
 from datetime import datetime
 from dotenv import dotenv_values 
 import dotenv
@@ -31,9 +30,6 @@ def setup(args):
 
         for val in res:
             print('Path: ', val)
-
-        
-
 
     if not args.name:
         if args.path:
@@ -61,7 +57,7 @@ def check_profile(profile):
 
 
 
-def argument_router(args):
+# def argument_router(args):
     """This function will read the arguments entered, and redirect to any given module as required"""
     if not args.setup:
         if args.profile == None:
