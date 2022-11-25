@@ -13,7 +13,7 @@ from Modules.Deployments.create_tunnels import create_tunnels
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
 
 
-def hasPassword():
+def setPassword():
     """Creates a hash if password protected profiles are created"""
     count = 0
     salt = "IamyourFath3r"
@@ -24,11 +24,35 @@ def hasPassword():
         count =+ 1
         if count == 5:
             print(colored('Exiting...','red'))
-        hasPassword()
+            exit()
+        setPassword()
     else:
-        password = p + salt
+        password = salt + p
         hashed = hashlib.md5(password.encode())
         return hashed
+
+def checkPassword(profile):
+    """Checks if the profile entered uses a password or not, if it has a password
+    the user will need to enter the password and the system will check if is correct or not"""
+    dotenv_file = dotenv.find_dotenv()
+    dotenv.load_dotenv(dotenv_file)
+    config = dotenv_values()
+
+    profile = profile + '_PASSW'
+    
+    if profile in config:
+        p = getpass('Enter the password \n')
+        salt = "IamyourFath3r"
+        password = salt + p
+        hashed = hashlib.md5(password.encode())
+
+        if hashed.hexdigest() == config[profile]:
+            return True
+        else:
+            return False
+    else:
+        return True
+
 
 def setup(args):
     """Creates the config.json file.
@@ -58,7 +82,7 @@ def setup(args):
             secret_name = args.name + '_SECRET'
             profile_name = 'PROFILE_' + args.name
             creds_name = args.name + '_PASSW'
-            passw = hasPassword()
+            passw = setPassword()
             dotenv.set_key(dotenv_file, profile_name, args.name)
             dotenv.set_key(dotenv_file, key_name, args.key)
             dotenv.set_key(dotenv_file, secret_name, args.secret)
@@ -92,7 +116,6 @@ def argument_router(args):
     """This function will read the arguments entered, and redirect to any given module as required"""
     if not args.setup:
         if args.profile == None:
-            print(colored("Entra","red"))
             with open ("config.json","r") as file:
                 config = json.load(file)
             jsondumpsprofile = json.dumps(json.dumps(config['DEFAULT_PROFILE']))
@@ -100,7 +123,10 @@ def argument_router(args):
             cleandata = jsonloadprofile.replace('"','')
             args.profile = cleandata
             print(args.profile)
-
+        if not checkPassword(args.profile):
+            print(colored('Wrong password, please try again', 'red'))
+            exit()
+        
     if args.create:
         if args.auth:
             print('Crear Auth')
@@ -126,7 +152,7 @@ def argument_router(args):
             if args.networks:
                 get_networks(args.profile)
             if args.test:
-                hasPassword()
+                checkPassword(args.profile)
         if args.policies:
             print('Listar Policies')
         if args.reports:

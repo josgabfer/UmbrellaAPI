@@ -131,7 +131,6 @@ def check_profile(profile):
 
 def main():
     parser = argparse.ArgumentParser(description='Umbrella API interface')
-    # subparsers = parser.add_subparsers(help='sub-command help')
     setup_group = parser.add_argument_group('setup')
     setup_group.add_argument('-n','--name', dest='name', metavar='',type=str, help='Use with the Key and the Secret to create a new profile or login for the Umbrella API')
     setup_group.add_argument('-k','--key', dest='key',metavar='', type=str, help='This value is the key created from your Umbrella Dashboard')
