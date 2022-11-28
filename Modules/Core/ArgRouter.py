@@ -129,21 +129,21 @@ def argument_router(args):
         
     if args.create:
         if args.auth:
-            print('Crear Auth')
+            print(colored('Test Create Authentication API', 'yellow'))
         if args.admin:
-            print('Crear Admin')
+             print(colored('Test Create Admin API', 'yellow'))
         if args.deployments:
             if args.tunnel:
                 create_tunnels(args.profile)
         if args.policies:
-            print('Crear Policies')
+             print(colored('Test Create Policies (Destination Lists) API', 'yellow'))
         if args.reports:
-            print('Crear Reportes')
+             print(colored('Test Create Reports API', 'yellow'))
     elif args.list:
         if args.auth:
-            print('Listar Auth')
+             print(colored('Test List Authentication API', 'yellow'))
         if args.admin:
-            print('Listar Admin')
+            print(colored('Test List Admin API', 'yellow'))
         if args.deployments:
             if args.roaming:
                 RequestRoamingClients(args.profile)
@@ -154,31 +154,31 @@ def argument_router(args):
             if args.test:
                 checkPassword(args.profile)
         if args.policies:
-            print('Listar Policies')
+            print(colored('Test List Policies API', 'yellow'))
         if args.reports:
-            print('Listar Reportes')
+            print(colored('Test List Reports API', 'yellow'))
     elif args.update:
         if args.auth:
-            print('Actualizar Auth')
+            print(colored('Test Update Authentication API', 'yellow'))
         if args.admin:
-            print('Actualizar Admin')
+            print(colored('Test Update Admin API', 'yellow'))
         if args.deployments:
-            print('Actualizar Deployments')
+            print(colored('Test Update Deployments API', 'yellow'))
         if args.policies:
-            print('Actualizar Policies')
+            print(colored('Test Update Policies API', 'yellow'))
         if args.reports:
-            print('Actualizar Reportes')
+            print(colored('Test Update Reports API', 'yellow'))
     elif args.delete:
         if args.auth:
-            print('Borrar Auth')
+            print(colored('Test Delete Authentication API', 'yellow'))
         if args.admin:
-            print('Borrar Admin')
+            print(colored('Test Delete Admin API', 'yellow'))
         if args.deployments:
-            print('Borrar Deployments')
+            print(colored('Test Delete Deployments API', 'yellow'))
         if args.policies:
-            print('Borrar Policies')
+            print(colored('Test Delete Policies (Dest Lists) API', 'yellow'))
         if args.reports:
-            print('Borrar Reportes')
+            print(colored('Test Delete Authentication API', 'yellow'))
     elif args.setup:
         setup(args)
     else:
