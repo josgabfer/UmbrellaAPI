@@ -12,7 +12,8 @@ from Modules.Deployments.list_networks import get_networks
 from Modules.Deployments.list_sites import get_sites
 from Modules.Deployments.list_internalNetworks import get_internalNetworks
 from Modules.Deployments.create_tunnels import create_tunnels
-from Modules.Deployments.roaming_computers import RequestRoamingClients 
+from Modules.Deployments.roaming_computers import RequestRoamingClients
+from Modules.Deployments.list_va import get_vas
 
 
 def setPassword():
@@ -159,6 +160,8 @@ def argument_router(args):
                 get_sites(args.profile)
             if args.test:
                 checkPassword(args.profile)
+            if args.va:
+                get_vas(args.profile)
         if args.policies:
             print(colored('Test List Policies API', 'yellow'))
         if args.reports:
