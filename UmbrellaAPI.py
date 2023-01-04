@@ -140,9 +140,6 @@ def main():
     setup_group.add_argument('-p','--profile', dest='profile', metavar='',type=str, help='This value tells the program what profile to use, if not entered, the system will use the default profile')
     setup_group.add_argument('-Co','--config', action='store_true', help='The config argument let\'s you see the configured profiles and paths saved into the .env file')
 
-
-
-
     module_group = parser.add_mutually_exclusive_group(required=True)
     module_group.add_argument('-AU', '--auth', action='store_true', help='Access Authentication module options, use with action arguments [-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-AD', '--admin', action='store_true', help='Access Admin module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
@@ -162,6 +159,7 @@ def main():
     deployment_group.add_argument('-r','--roaming', action='store_true', help='The roaming deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-t','--tunnel', action='store_true', help='The tunnel deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-nw','--networks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
+    deployment_group.add_argument('-in', '--internalNetworks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module') 
     deployment_group.add_argument('-Te','--test', action='store_true', help='test')    
     args = parser.parse_args()
 
