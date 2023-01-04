@@ -160,6 +160,7 @@ def main():
     deployment_group.add_argument('-t','--tunnel', action='store_true', help='The tunnel deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-nw','--networks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
     deployment_group.add_argument('-in', '--internalNetworks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module') 
+    deployment_group.add_argument('-st', '--sites', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')     
     deployment_group.add_argument('-Te','--test', action='store_true', help='test')    
     args = parser.parse_args()
 

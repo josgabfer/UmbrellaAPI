@@ -9,6 +9,7 @@ import json
 from termcolor import colored
 from Modules.Deployments.list_tunnels import  get_tunnels
 from Modules.Deployments.list_networks import get_networks
+from Modules.Deployments.list_sites import get_sites
 from Modules.Deployments.list_internalNetworks import get_internalNetworks
 from Modules.Deployments.create_tunnels import create_tunnels
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
@@ -154,6 +155,8 @@ def argument_router(args):
                 get_networks(args.profile)
             if args.internalNetworks:
                 get_internalNetworks(args.profile)
+            if args.sites:
+                get_sites(args.profile)
             if args.test:
                 checkPassword(args.profile)
         if args.policies:
