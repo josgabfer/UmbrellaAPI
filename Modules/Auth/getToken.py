@@ -51,7 +51,6 @@ def generate_auth_string(token_type):
     base64_auth = base64_bytes.decode('ascii')
     token_API_Type = token_type + '_' +'TOKEN'
 
-    # generate_token(base64_auth, token_API_Type)
     return (generate_token(base64_auth, token_API_Type))
     
 
@@ -80,11 +79,11 @@ def generate_token(base64_auth, token_API_Type):
             token_json = response.json()
             token = token_json.get('access_token')
             dotenv.set_key(dotenv_file,token_API_Type, token)
+            print(colored('Token created, saving token to .env file','yellow'))
             return token
 
     except HTTPError as httperror:
         print(f'HTPP error occured: {httperror}')
     except Exception as e:
         print(f'An error has occured : {e}')
-    print(colored('Token created, saving token to .env file','yellow'))
 

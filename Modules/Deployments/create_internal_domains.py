@@ -22,7 +22,7 @@ requests_log.propagate = True
 # Script variables, must not be changed
 date = datetime.datetime.now()
 timestamp = date.strftime('_%Y_%m_%d_%H_%M')
-lines = ['domainDescription,domain,includeAllVAs,includeAllMobileDevices,error\n']
+lines = ['domainDescription,domain,includeAllVAs,includeAllMobileDevices,response\n']
 
 """
 User variables - can be changed
@@ -33,8 +33,8 @@ tunnels_list    : Location and name of the CSV file that contains the informatio
 def getPath():
     with open ("config.json","r") as file:
         config = json.load(file)
-    logfile = config['LOGFILES']['PATH'] + 'CREATE_DOMAINS_' + str(timestamp) + ".csv"
-    confile = config['CONFILES']['PATH'] + '/domaininfo.csv'
+    logfile = config['LOGFILES']['PATH'] + '/' + 'CREATE_DOMAINS_' + str(timestamp) + ".csv"
+    confile = config['CONFILES']['PATH'] + '/' + 'domaininfo.csv'
     return {
         'LOG': logfile,
         'CONF': confile
@@ -73,17 +73,17 @@ def postDomains(token_type, domain):
     print(colored(f"Contacting API: {url}", 'green'))
 
     response = requests.post(url, headers=headers, data = payload)
-    print(response)
+    print(colored(response, 'green'))
     try:
         if (response.status_code == 401 or response.status_code == 403):
             """
             print(colored("Token has expired. Generating new token", "red"))
             token = generate_auth_string(token_type)
-            return (postTunnel(token_type))
+            return (postDomain(token_type))
             """
             print(response._content)
             token = generate_auth_string(token_type)
-            create_domains(token)
+            postDomains(token_type, domain)
         elif (response.status_code == 400 or response.status_code == 409):
             error = response.json()
             print(colored(f"Failed to add domain: \nReason: {error.get('error')}", 'red'))
@@ -92,26 +92,20 @@ def postDomains(token_type, domain):
             print (colored(f"Success! Domain added", 'green'))
             print("\n")
         else:
-            print(response.text)
-            return response
+            print(colored(response.text, 'green'))
+            return str(response.status_code)
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 
     except Exception as e:
         print(colored(f'HTPP error occured: {e}','red'))
 
-def writeDomainAttributes(response, domain, lines):
-    data = json.loads(response.text)
-    # status = response.status_code
-    # domainDescription = data.get('description','') if status == 200 else domain['description']
-    # domainName = data['domain'] if status == 200 else domain['domain']
-    # prefixLength = data['prefixLength'] if status == 200 else domain['prefix']
-    # isDynamic = data['isDynamic'] if status == 200 else domain['dynamic']
-    # originID = data.get('originId',0) if status == 200 else ''
-    # error = '' if status == 200 else data['error']
-    # message = data.get('message') 
-    # networkCreatedAt = data.get('createdAt','') if status == 200 else ''
-    line = data
+def writeDomainAttributes(response, domainInfo, lines):
+    domainDescription = domainInfo['description']
+    domain = domainInfo['domain']
+    includeAllMobileDevices = domainInfo['includeAllMobileDevices']
+    includeAllVAs = domainInfo['includeAllVAs']
+    line = domainDescription + ',' + domain + ',' + includeAllMobileDevices + ',' + includeAllVAs + ',' + response
     lines.append(line)
     return lines
 
@@ -123,8 +117,10 @@ def create_domains(token_type):
 
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
         domains = csvToJson(domain_list)
+        print(colored(domains,'green'))
         for domain in domains:
-            #postNetwork(token_type, network)
+            print(colored('Adding Domain: ' + domain['domain'],'green'))
+            postDomains(token_type, domain)
             response = postDomains(token_type, domain)
             writeDomainAttributes(response, domain, lines)
         print(colored(f"Log file created in: {logfile}", "yellow"))
