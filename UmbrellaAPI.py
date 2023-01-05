@@ -91,8 +91,7 @@ def main():
     deployment_group.add_argument('-in', '--internalNetworks', action='store_true', help='The internal networks deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module') 
     deployment_group.add_argument('-st', '--sites', action='store_true', help='The sites deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')     
     deployment_group.add_argument('-va', '--virtualAppliances', action='store_true', help='The virtual appliances deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')     
-    deployment_group.add_argument('-nd', '--networkDevices', action='store_true', help='The virtual appliances deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')     
-
+    deployment_group.add_argument('-nd', '--networkDevices', action='store_true', help='The network devices deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')     
     deployment_group.add_argument('-Te','--test', action='store_true', help='test')    
     args = parser.parse_args()
 

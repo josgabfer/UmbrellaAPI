@@ -13,7 +13,7 @@ requests_log = logging.getLogger("requests.packages.urllib3")
 requests_log.setLevel(logging.DEBUG)
 requests_log.propagate = True
 
-def get_request(token_type, url, parameters={}):
+def get_request(token_type, url, parameters = {}):
     config = dotenv_values(find_dotenv())
     env_token_type = token_type + '_TOKEN'
     token = config.get(env_token_type)
