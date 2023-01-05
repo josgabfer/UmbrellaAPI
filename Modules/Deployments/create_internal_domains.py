@@ -22,7 +22,8 @@ requests_log.propagate = True
 # Script variables, must not be changed
 date = datetime.datetime.now()
 timestamp = date.strftime('_%Y_%m_%d_%H_%M')
-lines = ['domainDescription,domain,includeAllVAs,includeAllMobileDevices,response\n']
+lines = ['id,domain,description,createdAt,modifiedAt,includeallVAs,includeAllMovileDevices,statusCode,error,message\n']
+
 
 """
 User variables - can be changed
@@ -73,7 +74,6 @@ def postDomains(token_type, domain):
     print(colored(f"Contacting API: {url}", 'green'))
 
     response = requests.post(url, headers=headers, data = payload)
-    status = response.status_code
     try:
         if (response.status_code == 401 or response.status_code == 403):
             """
@@ -88,26 +88,35 @@ def postDomains(token_type, domain):
             error = response.json()
             print(colored(f"Failed to add domain: \nReason: {error.get('error')}", 'red'))
             print("\n")
-            print(colored(status,'red'))
-            return response.text
+            print(response.status_code)
+            return response
         elif (response.status_code == 200):
             print (colored(f"Success! Domain added", 'green'))
             print("\n")
-            return response.text
+            return response
         else:
-            return response.text
+            print(response.text)
+        return response
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 
     except Exception as e:
         print(colored(f'HTPP error occured: {e}','red'))
 
-def writeDomainAttributes(response, domainInfo, lines):
-    domainDescription = domainInfo['description']
-    domain = domainInfo['domain']
-    includeAllMobileDevices = domainInfo['includeAllMobileDevices']
-    includeAllVAs = domainInfo['includeAllVAs']
-    line = domainDescription + ',' + domain + ',' + includeAllMobileDevices + ',' + includeAllVAs + ',' + response
+def writeDomainAttributes(response, lines):
+    data = json.loads(response.text)
+    status = response.status_code
+    id = data['id'] if status == 200 else 'NA'
+    domain = data['domain'] if status == 200 else 'NA'
+    description = data['description'] if status == 200 else 'NA'
+    createdAt = data['createdAt'] if status == 200 else 'NA'
+    modifiedAt = data['modifiedAt'] if status == 200 else 'NA'
+    includeAllVAs = data['includeAllVAs'] if status == 200 else 'NA'
+    includeAllMobileDevices = data['includeAllMobileDevices'] if status == 200 else 'NA'
+    statusCode = 'NA' if status == 200 else status
+    error = 'NA' if status == 200 else data['error']
+    message = 'NA' if status == 200 else data['message']
+    line = str(id) + ',' + domain + ',' + description + ',' + createdAt + ',' + modifiedAt + ',' + str(includeAllMobileDevices) + ',' + str(includeAllVAs) + ',' + str(statusCode) + ',' + error + ',' + message + '\n'
     lines.append(line)
     return lines
 
@@ -123,7 +132,7 @@ def create_domains(token_type):
         for domain in domains:
             print(colored('Adding Domain: ' + domain['domain'],'green'))
             response = postDomains(token_type, domain)
-            writeDomainAttributes(response, domain, lines)
+            writeDomainAttributes(response, lines)
         print(colored(f"Log file created in: {logfile}", "yellow"))
         logFile.writelines(lines)
     
