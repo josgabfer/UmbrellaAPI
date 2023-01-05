@@ -32,7 +32,7 @@ def get_request(token_type, url, parameters = {}):
         if (response.status_code == 401 or response.status_code == 403):
             print(colored("Token has expired. Generating new token", "red"))
             token = generate_auth_string(token_type)
-            get_request(token_type)
+            get_request(token_type, url)
         elif (response.status_code == 200):
             print(colored("Get request successfully executed!", "green"))
             print("\n")

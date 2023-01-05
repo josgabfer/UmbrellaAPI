@@ -129,7 +129,6 @@ def argument_router(args):
             jsonloadprofile = json.loads(jsondumpsprofile)
             cleandata = jsonloadprofile.replace('"','')
             args.profile = cleandata
-            print(args.profile)
         if not checkPassword(args.profile):
             print(colored('Wrong password, please try again', 'red'))
             exit()

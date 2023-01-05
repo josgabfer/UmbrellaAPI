@@ -73,7 +73,7 @@ def postDomains(token_type, domain):
     print(colored(f"Contacting API: {url}", 'green'))
 
     response = requests.post(url, headers=headers, data = payload)
-    print(colored(response, 'green'))
+    status = response.status_code
     try:
         if (response.status_code == 401 or response.status_code == 403):
             """
@@ -88,12 +88,14 @@ def postDomains(token_type, domain):
             error = response.json()
             print(colored(f"Failed to add domain: \nReason: {error.get('error')}", 'red'))
             print("\n")
+            print(colored(status,'red'))
+            return response.text
         elif (response.status_code == 200):
             print (colored(f"Success! Domain added", 'green'))
             print("\n")
+            return response.text
         else:
-            print(colored(response.text, 'green'))
-            return str(response.status_code)
+            return response.text
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 
@@ -120,7 +122,6 @@ def create_domains(token_type):
         print(colored(domains,'green'))
         for domain in domains:
             print(colored('Adding Domain: ' + domain['domain'],'green'))
-            postDomains(token_type, domain)
             response = postDomains(token_type, domain)
             writeDomainAttributes(response, domain, lines)
         print(colored(f"Log file created in: {logfile}", "yellow"))
