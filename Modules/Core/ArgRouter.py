@@ -12,9 +12,10 @@ from Modules.Deployments.list_networks import get_networks
 from Modules.Deployments.list_sites import get_sites
 from Modules.Deployments.list_internalNetworks import get_internalNetworks
 from Modules.Deployments.list_networkDevices import get_networkDevices
+from Modules.Deployments.list_va import get_vas
 from Modules.Deployments.create_tunnels import create_tunnels
 from Modules.Deployments.roaming_computers import RequestRoamingClients
-from Modules.Deployments.list_va import get_vas
+
 
 
 

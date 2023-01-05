@@ -6,7 +6,6 @@ from termcolor import colored
 import http.client as http_client
 import logging
 
-
 http_client.HTTPConnection.debuglevel = 1
 logging.basicConfig()
 logging.getLogger().setLevel(logging.DEBUG)
@@ -16,8 +15,7 @@ requests_log.propagate = True
 
 """User variables - can be changed
 path            : Location where the file will be saved. Must end with '\\'
-file_name       : By default the script will use the next Format: networks_list_<year>-<month>-<day>-<hour>-<minute>.csv
-entry_limit     : Integer value, here we specify the number of records to be saved in the CSV file."""
+file_name       : By default the script will use the next Format: networks_list_<year>-<month>-<day>-<hour>-<minute>.csv"""
 path = "C:\\Testing\\"
 file_name = f'network_devices_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 entry_limit = 100
