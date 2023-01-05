@@ -28,7 +28,7 @@ def get_request(token_type, url, parameters={}):
     print("\n")
 
     try:
-        response = requests.get(url, headers = headers, params=parameters)
+        response = requests.get(url, headers=headers, params=parameters)
         if (response.status_code == 401 or response.status_code == 403):
             print(colored("Token has expired. Generating new token", "red"))
             token = generate_auth_string(token_type)
@@ -39,6 +39,7 @@ def get_request(token_type, url, parameters={}):
             return response.json()
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
+        
 
     except Exception as e:
         print(colored(f'HTPP error occured: {e}','red'))

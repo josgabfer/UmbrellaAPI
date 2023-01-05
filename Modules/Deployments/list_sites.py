@@ -1,9 +1,6 @@
-from operator import index
-from ..Auth.getToken import generate_auth_string
+from ..Core.get import  get_request
 import datetime 
-from dotenv import dotenv_values, find_dotenv
 import pandas 
-import requests
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
@@ -25,39 +22,17 @@ file_name = f'sites_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' +
 entry_limit = 100
 
 def get_sites(token_type):
-    config = dotenv_values(find_dotenv())
-    env_token_type = token_type + '_TOKEN'
-    token = config.get(env_token_type)
-    if (token == None):
-        print(colored("Token does not exists. Creating a new token", "red"))
-        token = (generate_auth_string(token_type))
-    url = "https://api.umbrella.com/deployments/v2/sites"
-    payload = None
-    parameters = {
-        "limit" : entry_limit
-    }
-    headers = {
-            "Authorization": "Bearer " + token,
-            "Content-Type": "application/json"
-        }
-    print(colored(f"Contacting API: {url}"), 'green')
-    print("\n")
-
     try:
-        print((colored("Gathering Umbrella sites information", "green")))
-        response = requests.get(url, headers = headers, params=parameters)
-        if (response.status_code == 401 or response.status_code == 403):
-            print(colored("Token has expired. Generating new token", "red"))
-            token = generate_auth_string(token_type)
-            get_sites(token_type)
-        elif (response.status_code == 200):
-            sites_json = response.json()
-            sites_list = pandas.DataFrame(sites_json)
-            sites_list.to_csv(path + file_name, index=False)
-            print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+        url = "https://api.umbrella.com/deployments/v2/sites"
+        param = {
+            "limit": entry_limit
+        }
+        sites_json = get_request(token_type, url, param)
+        sites_list = pandas.DataFrame(sites_json)
+        sites_list.to_csv(path + file_name, index=False)
+        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 
     except Exception as e:
         print(colored(f'HTPP error occured: {e}','red'))
-

@@ -24,7 +24,10 @@ entry_limit = 100
 def get_vas(token_type):
     try:
         url = "https://api.umbrella.com/deployments/v2/virtualappliances"
-        virtualAppliances_json = get_request(token_type, url)
+        param = {
+            "limit": entry_limit
+        }
+        virtualAppliances_json = get_request(token_type, url, param)
         virtualAppliances_list = pandas.DataFrame(virtualAppliances_json)
         virtualAppliances_list.to_csv(path + file_name, index=False)
         print(colored(f"Success! {file_name} created and stored in {path}", "green"))
