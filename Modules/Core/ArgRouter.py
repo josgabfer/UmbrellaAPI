@@ -10,6 +10,7 @@ from termcolor import colored
 from Modules.Deployments.list_tunnels import  get_tunnels
 from Modules.Deployments.list_networks import get_networks
 from Modules.Deployments.create_tunnels import create_tunnels
+from Modules.Deployments.create_internal_domains import create_domains
 from Modules.Deployments.roaming_computers import RequestRoamingClients 
 
 
@@ -136,7 +137,7 @@ def argument_router(args):
             if args.tunnel:
                 create_tunnels(args.profile)
         if args.policies:
-             print(colored('Test Create Policies (Destination Lists) API', 'yellow'))
+             create_domains(args.profile)
         if args.reports:
              print(colored('Test Create Reports API', 'yellow'))
     elif args.list:

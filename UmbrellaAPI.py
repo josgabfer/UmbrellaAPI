@@ -57,78 +57,6 @@ def check_profile(profile):
 
 
 
-# def argument_router(args):
-    """This function will read the arguments entered, and redirect to any given module as required"""
-    if not args.setup:
-        if args.profile == None:
-            print(colored("Entra","red"))
-            with open ("config.json","r") as file:
-                config = json.load(file)
-            jsondumpsprofile = json.dumps(json.dumps(config['DEFAULT_PROFILE']))
-            jsonloadprofile = json.loads(jsondumpsprofile)
-            cleandata = jsonloadprofile.replace('"','')
-            args.profile = cleandata
-            print(args.profile)
-
-    if args.create:
-        if args.auth:
-            print('Crear Auth')
-        if args.admin:
-            print('Crear Admin')
-        if args.deployments:
-            if args.tunnel:
-                create_tunnels(args.profile)
-        if args.policies:
-            print('Crear Policies')
-        if args.reports:
-            print('Crear Reportes')
-    elif args.list:
-        if args.auth:
-            print('Listar Auth')
-        if args.admin:
-            print('Listar Admin')
-        if args.deployments:
-            if args.roaming:
-                RequestRoamingClients(args.profile)
-            if args.tunnel:
-                get_tunnels(args.profile)
-            if args.networks:
-                get_networks(args.profile)
-        if args.policies:
-            print('Listar Policies')
-        if args.reports:
-            print('Listar Reportes')
-    elif args.update:
-        if args.auth:
-            print('Actualizar Auth')
-        if args.admin:
-            print('Actualizar Admin')
-        if args.deployments:
-            print('Actualizar Deployments')
-        if args.policies:
-            print('Actualizar Policies')
-        if args.reports:
-            print('Actualizar Reportes')
-    elif args.delete:
-        if args.auth:
-            print('Borrar Auth')
-        if args.admin:
-            print('Borrar Admin')
-        if args.deployments:
-            print('Borrar Deployments')
-        if args.policies:
-            print('Borrar Policies')
-        if args.reports:
-            print('Borrar Reportes')
-    elif args.setup:
-        setup(args)
-    else:
-        print(colored('Argument not recognize, use "UmbrellaAPI.py -h" for more information','yellow'))
-
-
-
-
-
 def main():
     parser = argparse.ArgumentParser(description='Umbrella API interface')
     setup_group = parser.add_argument_group('setup')
@@ -147,7 +75,7 @@ def main():
     module_group.add_argument('-AU', '--auth', action='store_true', help='Access Authentication module options, use with action arguments [-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-AD', '--admin', action='store_true', help='Access Admin module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-D', '--deployments', action='store_true', help='Access Deployments module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
-    module_group.add_argument('-P', '--policies', action='store_true', help='Access Policy module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
+    # module_group.add_argument('-P', '--policies', action='store_true', help='Access Policy module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-R', '--reports', action='store_true', help='Access Report module options, use with action arguments[l --> list]')
     module_group.add_argument('-S', '--setup', action='store_true', help='Access the setup module, use with action arguments (see setup options)')
 
@@ -162,6 +90,7 @@ def main():
     deployment_group.add_argument('-r','--roaming', action='store_true', help='The roaming deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-t','--tunnel', action='store_true', help='The tunnel deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-nw','--networks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
+    deployment_group.add_argument('-po','--policies', action='store_true', help='The domains deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
     deployment_group.add_argument('-Te','--test', action='store_true', help='test')    
     args = parser.parse_args()
 
