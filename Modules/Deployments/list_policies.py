@@ -23,17 +23,22 @@ entry_limit = 100
 
 def get_policies(token_type):
     try:
+        policyType = input(colored("Type 'dns' to pull DNS policies or type 'web' to pull WEB policies: ", "blue"))
+        if (policyType != 'dns' and policyType != 'web'):
+            print(colored("Invalid option", "red"))
+            return
         url = "https://api.umbrella.com/deployments/v2/policies"
         param = {
-            "limit": entry_limit
+            "limit": entry_limit,
+            "type": policyType
         }
         fileType = "REPORTFILES"
         path = getPath(fileType)
-        print (colored("Hola: " + token_type + ' '+ url + ' ' + str(param), 'green'))
-        policies_json = get_request(token_type, url)
-        policies_list = pandas.DataFrame(policies_json)
-        policies_list.to_csv(path + file_name, index=False)
-        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+        policies_json = get_request(token_type, url, param)
+        if (policies_json != None):
+            policies_list = pandas.DataFrame(policies_json)
+            policies_list.to_csv(path + policyType + "_" + file_name, index=False)
+            print(colored(fr"Success! {policyType}_{file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 

@@ -29,7 +29,8 @@ def get_tunnels(token_type):
             "status": "DOWN"
         }
         tunnels_json = get_request(token_type, url, param)
-        parse_tunnels(tunnels_json)
+        if (tunnels_json != None):
+            parse_tunnels(tunnels_json)
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 

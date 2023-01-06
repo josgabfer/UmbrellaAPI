@@ -31,9 +31,10 @@ def get_internalDomains(token_type):
         fileType = "REPORTFILES"
         path = getPath(fileType)
         internalDomains_json = get_request(token_type, url, param)
-        internalDomains_list = pandas.DataFrame(internalDomains_json)
-        internalDomains_list.to_csv(path + file_name, index=False)
-        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+        if (internalDomains_json != None):
+            internalDomains_list = pandas.DataFrame(internalDomains_json)
+            internalDomains_list.to_csv(path + file_name, index=False)
+            print(colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 

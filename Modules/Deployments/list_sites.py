@@ -30,9 +30,10 @@ def get_sites(token_type):
         fileType = "REPORTFILES"
         path = getPath(fileType)
         sites_json = get_request(token_type, url, param)
-        sites_list = pandas.DataFrame(sites_json)
-        sites_list.to_csv(path + file_name, index=False)
-        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+        if (sites_json != None):
+            sites_list = pandas.DataFrame(sites_json)
+            sites_list.to_csv(path + file_name, index=False)
+            print(colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 

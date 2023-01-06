@@ -28,9 +28,10 @@ def get_vas(token_type):
             "limit": entry_limit
         }
         virtualAppliances_json = get_request(token_type, url, param)
-        virtualAppliances_list = pandas.DataFrame(virtualAppliances_json)
-        virtualAppliances_list.to_csv(path + file_name, index=False)
-        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+        if (virtualAppliances_json != None):
+            virtualAppliances_list = pandas.DataFrame(virtualAppliances_json)
+            virtualAppliances_list.to_csv(path + file_name, index=False)
+            print(colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 

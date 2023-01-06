@@ -30,9 +30,10 @@ def get_internalNetworks(token_type):
         fileType = "REPORTFILES"
         path = getPath(fileType)
         internalNetworks_json = get_request(token_type, url, param)
-        internalNetworks_list = pandas.DataFrame(internalNetworks_json)
-        internalNetworks_list.to_csv(path + file_name, index=False)
-        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+        if (internalNetworks_json != None):
+            internalNetworks_list = pandas.DataFrame(internalNetworks_json)
+            internalNetworks_list.to_csv(path + file_name, index=False)
+            print(colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 

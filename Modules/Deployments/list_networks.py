@@ -31,9 +31,10 @@ def get_networks(token_type):
         fileType = "REPORTFILES"
         path = getPath(fileType)
         networks_json = get_request(token_type, url, param)
-        networks_list = pandas.DataFrame(networks_json)
-        networks_list.to_csv(path + file_name, index=False)
-        print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+        if (networks_json != None):
+            networks_list = pandas.DataFrame(networks_json)
+            networks_list.to_csv(path + file_name, index=False)
+            print(colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
         print(colored(f'HTPP error occured: {httperr}','red'))
 
