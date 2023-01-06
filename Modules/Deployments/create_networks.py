@@ -5,6 +5,7 @@ import requests
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
+from ..Core.getPath import getPath
 import logging
 import csv
 import json
@@ -32,15 +33,15 @@ tunnels_list    : Location and name of the CSV file that contains the informatio
 # logfile = 'C:\\createTunnelsLog'+str(timestamp)+'.csv'
 # tunnels_list = 'C:\\tunnelinfo.csv'
 
-def getPath():
-    with open ("config.json","r") as file:
-        config = json.load(file)
-    logfile = config['LOGFILES']['PATH'] + 'CREATE_NETWORKS_' + str(timestamp) + ".csv"
-    confile = config['CONFILES']['PATH'] + 'networksinfo.csv'
-    return {
-        'LOG': logfile,
-        'CONF': confile
-    }
+# def getPath():
+#     with open ("config.json","r") as file:
+#         config = json.load(file)
+#     logfile = config['LOGFILES']['PATH'] + 'CREATE_NETWORKS_' + str(timestamp) + ".csv"
+#     confile = config['CONFILES']['PATH'] + 'networksinfo.csv'
+#     return {
+#         'LOG': logfile,
+#         'CONF': confile
+#     }
 
 def csvToJson(network_list):
     json_array = []
@@ -114,9 +115,9 @@ def writeNetworkAttributes(response, network, lines):
 #lines = ['networkname, ipaddress, prefix, dynamic, originID, status, error, networkCreatedAt\n']
 
 def create_networks(token_type):
-    files = getPath()
-    network_list = files['CONF'] 
-    logfile = files['LOG']
+    # files = getPath()
+    network_list = getPath("CONFILES") +'networksinfo.csv'
+    logfile = getPath("LOGFILES") + 'CREATE_NETWORKS_' + str(timestamp) + ".csv"
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
         networks = csvToJson(network_list)
         for network in networks:
