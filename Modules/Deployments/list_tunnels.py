@@ -4,6 +4,7 @@ import pandas
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
+from ..Core.getPath import getPath
 import logging
 import flatdict as flat
 
@@ -18,7 +19,6 @@ requests_log.propagate = True
 path            : Location where the file will be saved. Must end with '\\'
 file_name       : By default the script will use the next Format: tunnel_list_<year>-<month>-<day>-<hour>-<minute>.csv
 delete_columns  : List of columns to be removed from the CSV file. Example: delete_columns = ['client.authentication.parameters.modifiedAt']"""
-path = "C:\\Testing\\"
 file_name = f'tunnel_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 delete_columns = []
 
@@ -44,7 +44,8 @@ def parse_tunnels(tunnels_json):
                 for delete in delete_columns:
                     tunnels_json[item].pop(delete)
         tunnel_list = pandas.DataFrame(tunnels_json)
-        
+        fileType = "REPORTFILES"
+        path = getPath(fileType)
         tunnel_list.to_csv(path + file_name, index=False)
         
         print(colored(f"Success! {file_name} created and stored in {path}", "green"))

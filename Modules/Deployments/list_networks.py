@@ -4,6 +4,7 @@ import pandas
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
+from ..Core.getPath import getPath
 import logging
 
 http_client.HTTPConnection.debuglevel = 1
@@ -27,6 +28,8 @@ def get_networks(token_type):
         param = {
             "limit": entry_limit
         }
+        fileType = "REPORTFILES"
+        path = getPath(fileType)
         networks_json = get_request(token_type, url, param)
         networks_list = pandas.DataFrame(networks_json)
         networks_list.to_csv(path + file_name, index=False)

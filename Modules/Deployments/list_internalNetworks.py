@@ -4,6 +4,7 @@ import pandas
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
+from ..Core.getPath import getPath
 import logging
 
 http_client.HTTPConnection.debuglevel = 1
@@ -17,7 +18,6 @@ requests_log.propagate = True
 path            : Location where the file will be saved. Must end with '\\'
 file_name       : By default the script will use the next Format: networks_list_<year>-<month>-<day>-<hour>-<minute>.csv
 entry_limit     : Integer value, here we specify the number of records to be saved in the CSV file."""
-path = "C:\\Testing\\"
 file_name = f'internal_networks_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 entry_limit = 100
 
@@ -27,6 +27,8 @@ def get_internalNetworks(token_type):
         param = {
             "limit": entry_limit
         }
+        fileType = "REPORTFILES"
+        path = getPath(fileType)
         internalNetworks_json = get_request(token_type, url, param)
         internalNetworks_list = pandas.DataFrame(internalNetworks_json)
         internalNetworks_list.to_csv(path + file_name, index=False)
