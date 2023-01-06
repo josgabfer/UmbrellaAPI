@@ -8,13 +8,14 @@ import dotenv
 import json
 from termcolor import colored
 from Modules.Deployments.list_tunnels import  get_tunnels
+from Modules.Deployments.list_internalDomains import get_internalDomains
 from Modules.Deployments.list_networks import get_networks
 from Modules.Deployments.list_sites import get_sites
 from Modules.Deployments.list_internalNetworks import get_internalNetworks
 from Modules.Deployments.list_networkDevices import get_networkDevices
 from Modules.Deployments.list_va import get_vas
 from Modules.Deployments.create_tunnels import create_tunnels
-from Modules.Deployments.create_internal_domains import create_domains
+from Modules.Deployments.create_internalDomains import create_domains
 from Modules.Deployments.roaming_computers import RequestRoamingClients
 from Modules.Deployments.list_policies import get_policies
 
@@ -141,8 +142,10 @@ def argument_router(args):
         if args.deployments:
             if args.tunnel:
                 create_tunnels(args.profile)
+            if args.domains:
+                create_domains(args.profile)
         if args.policies:
-             create_domains(args.profile)
+             create_domains("Test List Policies")
         if args.reports:
              print(colored('Test Create Reports API', 'yellow'))
     elif args.list:
@@ -169,6 +172,9 @@ def argument_router(args):
                 get_networkDevices(args.profile)
             if args.policies:
                 get_policies(args.profile)
+            if args.domains:
+                get_internalDomains(args.profile)
+                
         #if args.policies:
         #    print(colored('Test List Policies API', 'yellow'))
         if args.reports:

@@ -72,7 +72,6 @@ def main():
     module_group.add_argument('-AU', '--auth', action='store_true', help='Access Authentication module options, use with action arguments [-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-AD', '--admin', action='store_true', help='Access Admin module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-D', '--deployments', action='store_true', help='Access Deployments module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
-    # module_group.add_argument('-P', '--policies', action='store_true', help='Access Policy module options, use with action arguments[-c --> Create, -r --> read, -u --> update, l --> list]')
     module_group.add_argument('-R', '--reports', action='store_true', help='Access Report module options, use with action arguments[l --> list]')
     module_group.add_argument('-S', '--setup', action='store_true', help='Access the setup module, use with action arguments (see setup options)')
 
@@ -87,7 +86,8 @@ def main():
     deployment_group.add_argument('-r','--roaming', action='store_true', help='The roaming deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-t','--tunnel', action='store_true', help='The tunnel deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-nw','--networks', action='store_true', help='The network deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
-    deployment_group.add_argument('-po','--policies', action='store_true', help='The domains deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
+    deployment_group.add_argument('-po','--policies', action='store_true', help='The policies deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
+    deployment_group.add_argument('-id','--domains', action='store_true', help='The domains deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')    
     deployment_group.add_argument('-in', '--internalNetworks', action='store_true', help='The internal networks deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module') 
     deployment_group.add_argument('-st', '--sites', action='store_true', help='The sites deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')     
     deployment_group.add_argument('-va', '--virtualAppliances', action='store_true', help='The virtual appliances deployment operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')     

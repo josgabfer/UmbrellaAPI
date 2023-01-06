@@ -34,8 +34,8 @@ tunnels_list    : Location and name of the CSV file that contains the informatio
 def getPath():
     with open ("config.json","r") as file:
         config = json.load(file)
-    logfile = config['LOGFILES']['PATH'] + '/' + 'CREATE_DOMAINS_' + str(timestamp) + ".csv"
-    confile = config['CONFILES']['PATH'] + '/' + 'domaininfo.csv'
+    logfile = config['LOGFILES']['PATH'] + 'CREATE_DOMAINS_' + str(timestamp) + ".csv"
+    confile = config['CONFILES']['PATH'] + 'domaininfo.csv'
     return {
         'LOG': logfile,
         'CONF': confile
