@@ -5,6 +5,7 @@ import requests
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
+from ..Core.getPath import getPath
 import logging
 import csv
 import json
@@ -30,16 +31,6 @@ User variables - can be changed
 logfile         : Specify the path and name of the log file. Default name: create_internal_domains_<year>_<month>_<day>_<hour>_<minute>.csv
 tunnels_list    : Location and name of the CSV file that contains the information of the internal domains that will be created in the Umbrella dashboard
 """
-
-def getPath():
-    with open ("config.json","r") as file:
-        config = json.load(file)
-    logfile = config['LOGFILES']['PATH'] + 'CREATE_DOMAINS_' + str(timestamp) + ".csv"
-    confile = config['CONFILES']['PATH'] + 'domaininfo.csv'
-    return {
-        'LOG': logfile,
-        'CONF': confile
-    }
 
 
 def csvToJson(network_list):
@@ -104,7 +95,10 @@ def postDomains(token_type, domain):
         print(colored(f'HTPP error occured: {e}','red'))
 
 def writeDomainAttributes(response, lines):
-    data = json.loads(response.text)
+    if response == None or response == '':
+        print(colored('None or empty string response detected'))
+    else:
+        data = json.loads((response.text))
     status = response.status_code
     id = data['id'] if status == 200 else 'NA'
     domain = data['domain'] if status == 200 else 'NA'
@@ -121,10 +115,8 @@ def writeDomainAttributes(response, lines):
     return lines
 
 def create_domains(token_type):
-
-    files = getPath()
-    domain_list = files['CONF']
-    logfile = files['LOG']
+    logfile = getPath("LOGFILES") + 'CREATE_DOMAINS_' + str(timestamp) + ".csv"
+    domain_list = getPath("CONFILES") + 'domaininfo.csv'
 
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
         domains = csvToJson(domain_list)

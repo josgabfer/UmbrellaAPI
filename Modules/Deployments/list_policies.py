@@ -29,7 +29,6 @@ def get_policies(token_type):
         }
         fileType = "REPORTFILES"
         path = getPath(fileType)
-        print (colored("Hola: " + token_type + ' '+ url + ' ' + str(param), 'green'))
         policies_json = get_request(token_type, url)
         policies_list = pandas.DataFrame(policies_json)
         policies_list.to_csv(path + file_name, index=False)
