@@ -17,7 +17,7 @@ count = 0
 def get_request(token_type, url, parameters = {}): 
     global count
     count += 1
-    if (count == 5):
+    if (count == 3):
         print(colored(f"\nMaximum attempts to reach {url} exceeded", "red"))
         return
     config = dotenv_values(find_dotenv())
