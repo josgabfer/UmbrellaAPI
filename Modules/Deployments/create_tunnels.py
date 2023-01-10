@@ -55,6 +55,7 @@ def create_tunnels(token_type):
     url = "https://api.umbrella.com/deployments/v2/tunnels"
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
         tunnels = csvToJson(tunnels_list)
+  
         for tunnel in tunnels:
             payload = json.dumps({
                 "name": tunnel['tunnelname'],

@@ -35,8 +35,7 @@ def postItems(token_type, url, payload = {}):
     try:
         if (response.status_code == 401 or response.status_code == 403):
             token = generate_auth_string(token_type)
-            print(response._content)
-            postItems(token, url, payload = {}, headers = {})
+            return postItems(token_type, url, payload)
         elif (response.status_code == 400 or response.status_code == 409):
             error = response.json()
             print(colored(f"Failed to add the items: \nReason: {error.get('error')}", 'red'))

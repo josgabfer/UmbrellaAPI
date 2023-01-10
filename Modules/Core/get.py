@@ -38,7 +38,7 @@ def get_request(token_type, url, parameters = {}):
         if (response.status_code == 401 or response.status_code == 403):
             print(colored(f"Failed to connect to {url}. Token might have expired, generating new token\n", "red"))
             token = generate_auth_string(token_type)
-            get_request(token_type, url, parameters)
+            return get_request(token_type, url, parameters)
         elif (response.status_code == 404):
             print(colored("\nError 404 not found", "red"))
         elif (response.status_code == 200):
