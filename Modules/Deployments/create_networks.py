@@ -1,6 +1,8 @@
 from ..Auth.getToken import generate_auth_string
 import datetime 
 from dotenv import dotenv_values, find_dotenv
+from ..Core.csvToJson import csvToJson
+from ..Core.post import postItems
 import requests
 from requests.models import HTTPError
 from termcolor import colored
@@ -30,73 +32,7 @@ logfile         : Specify the path and name of the log file. Default name: creat
 tunnels_list    : Location and name of the CSV file that contains the information of the tunnels that will be created in the Umbrella dashboard
 """
 
-# logfile = 'C:\\createTunnelsLog'+str(timestamp)+'.csv'
-# tunnels_list = 'C:\\tunnelinfo.csv'
 
-# def getPath():
-#     with open ("config.json","r") as file:
-#         config = json.load(file)
-#     logfile = config['LOGFILES']['PATH'] + 'CREATE_NETWORKS_' + str(timestamp) + ".csv"
-#     confile = config['CONFILES']['PATH'] + 'networksinfo.csv'
-#     return {
-#         'LOG': logfile,
-#         'CONF': confile
-#     }
-
-def csvToJson(network_list):
-    json_array = []
-    with open(network_list, 'r', encoding='utf-8-sig') as csvf: 
-        csvReader = csv.DictReader(csvf) 
-        for row in csvReader: 
-            json_array.append(row)
-    json_string = json.dumps(json_array, indent=4)  
-    json_data = json.loads(json_string)
-    return json_data
-
-def postNetwork(token_type, network):
-    config = dotenv_values(find_dotenv())
-    env_token_type = token_type + '_TOKEN'
-    token = config.get(env_token_type)
-    if (token == None):
-        print(colored("Token does not exists. Creating a new token", "red"))
-        token = (generate_auth_string(token_type))
-    url = "https://api.umbrella.com/deployments/v2/networks"
-    payload = json.dumps({
-        "name": network['networkname'],
-        "prefixLength": network['prefix'],
-        "ipAddress": network['ipaddress'],
-        "status": "CLOSED",
-        "isDynamic": network['dynamic'] == "True" or network['dynamic'] == "TRUE"
-    })
-    headers = {
-        'Authorization': 'Bearer ' + token,
-        'Content-Type': 'application/json',
-    }
-    print(colored(f"Contacting API: {url}", 'green'))
-    response = requests.post(url, headers = headers, data = payload)
-    try:
-        if (response.status_code == 401 or response.status_code == 403):
-            """
-            print(colored("Token has expired. Generating new token", "red"))
-            token = generate_auth_string(token_type)
-            return (postTunnel(token_type))
-            """
-            print(response._content)
-        elif (response.status_code == 400 or response.status_code == 409):
-            error = response.json()
-            print(colored(f"Failed to add tunnel: \nReason: {error.get('error')}", 'red'))
-            print("\n")
-        elif (response.status_code == 200):
-            print (colored(f"Success! Network added", 'green'))
-            print("\n")
-        else:
-            print(response.text)
-        return response
-    except HTTPError as httperr:
-        print(colored(f'HTPP error occured: {httperr}','red'))
-
-    except Exception as e:
-        print(colored(f'HTPP error occured: {e}','red'))
 
 def writeNetworkAttributes(response, network, lines):
     data = json.loads(response.text)
@@ -115,14 +51,23 @@ def writeNetworkAttributes(response, network, lines):
 #lines = ['networkname, ipaddress, prefix, dynamic, originID, status, error, networkCreatedAt\n']
 
 def create_networks(token_type):
-    # files = getPath()
+
     network_list = getPath("CONFILES") +'networksinfo.csv'
     logfile = getPath("LOGFILES") + 'CREATE_NETWORKS_' + str(timestamp) + ".csv"
+    url = "https://api.umbrella.com/deployments/v2/networks"
+
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
         networks = csvToJson(network_list)
         for network in networks:
-            #postNetwork(token_type, network)
-            response = postNetwork(token_type, network)
+            payload = json.dumps({
+            "name": network['networkname'],
+            "prefixLength": network['prefix'],
+            "ipAddress": network['ipaddress'],
+            "status": "CLOSED",
+            "isDynamic": network['dynamic'] == "True" or network['dynamic'] == "TRUE"
+                })
+            print(colored('Adding Network: ' + network['domain'],'green'))
+            response = postItems(token_type,url, payload)
             writeNetworkAttributes(response, network, lines)
         print(colored(f"Log file created in: {logfile}", "yellow"))
         logFile.writelines(lines)
