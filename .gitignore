@@ -2,4 +2,4 @@
 *.env
 UmbrellaENV/
 *.csv
-*.json
+*.pyc

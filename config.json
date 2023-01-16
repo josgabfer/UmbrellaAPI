@@ -1,0 +1,25 @@
+{
+    "DEFAULT_PROFILE":"",
+    "LOGFILES": {
+        "PATH":"",
+        "DEPLOYMENTS": "DEPLOYMENT",
+        "ADMIN": "ADMIN",
+        "POLICIES":"POLICIES",
+        "AUTH":"AUTH",
+        "POLICIES":"POLICIES",
+        "REPORTS":"REPORTS"
+    },
+    "CONFILES":{
+        "PATH":"",
+        "DEPLOYMENTS": "DEPLOYMENT",
+        "ADMIN": "ADMIN",
+        "POLICIES":"POLICIES",
+        "AUTH":"AUTH",
+        "POLICIES":"POLICIES",
+        "REPORTS":"REPORTS"
+    },
+    "REPORTFILES":{
+        "PATH":""
+    }
+    
+}
