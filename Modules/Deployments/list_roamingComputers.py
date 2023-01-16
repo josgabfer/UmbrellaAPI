@@ -27,6 +27,9 @@ def RequestRoamingClients(token_type):
         token = generate_auth_string(token_type)
 
     URL="https://api.umbrella.com/deployments/v2/roamingcomputers"
+    params = {
+        
+    }
     payload = None
     headers = {
         "Authorization": "Bearer " + token,
@@ -37,7 +40,7 @@ def RequestRoamingClients(token_type):
 
     try:
         print(colored("Requesting the list of roaming computers","green"))
-        response = requests.request('GET', URL, headers=headers, data = payload)
+        response = requests.request('GET', URL, headers=headers, data = payload, params=params)
         if(response.status_code == 401 or response.status_code == 403):
             print(colored("Expired Token, genereting a new one","red"))
             token = generate_auth_string(token_type)
