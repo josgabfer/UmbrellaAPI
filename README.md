@@ -65,7 +65,7 @@ Mac: python3 UmbrellaAPI.py
 # IPsec tunnels: tunnelinfo.csv
 # Networks: networkinfo.csv
 
-# The necessary templates are available in the Templates folder, you can save them in your prefer directory, and change the values in CONFILES
+# The necessary templates are available in the Templates folder, you can save them in your prefer directory, and change the values CONFILES value in the config.json file
 
 #Examples
 
