@@ -16,7 +16,7 @@ from Modules.Deployments.list_networkDevices import get_networkDevices
 from Modules.Deployments.list_va import get_vas
 from Modules.Deployments.create_tunnels import create_tunnels
 from Modules.Deployments.create_internalDomains import create_domains
-from Modules.Deployments.list_roamingComputers import RequestRoamingClients
+from Modules.Deployments.list_roamingComputers import get_roamingComputers
 from Modules.Deployments.list_policies import get_policies
 
 
@@ -155,7 +155,7 @@ def argument_router(args):
             print(colored('Test List Admin API', 'yellow'))
         if args.deployments:
             if args.roaming:
-                RequestRoamingClients(args.profile)
+                get_roamingComputers(args.profile)
             if args.tunnel:
                 get_tunnels(args.profile)
             if args.networks:
