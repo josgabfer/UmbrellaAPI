@@ -67,6 +67,11 @@ def setup(args):
     This file contains settings like the path to save the reports created by the API, or API name profiles."""
 
     dotenv_file = dotenv.find_dotenv()
+    if (dotenv_file == ""):
+        print(colored("No .env file found. Creating new .env file.", "yellow"))
+        with open(".env", 'w') as file:
+            file.write("#.env variables\n")
+        dotenv_file = dotenv.find_dotenv()
     dotenv.load_dotenv(dotenv_file)
     if args.config:
         config = dotenv_values()
