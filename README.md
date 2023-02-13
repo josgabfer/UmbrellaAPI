@@ -59,13 +59,15 @@ Mac: python3 UmbrellaAPI.py
 
 # CONFILES: Contains the PATH variable, the information in here will be the path where the configuration files are located, configuration files may include informatio for internal domain creation, IPsec tunnel creation, etc. 
 
+# We do recommend creating a directory for your configuration files, and for the logfiles
+
 # The config files should be named as follows:
 
 # internal domains: domaininfo.csv
 # IPsec tunnels: tunnelinfo.csv
 # Networks: networkinfo.csv
 
-# The necessary templates are available in the Templates folder, you can save them in your prefer directory, and change the values CONFILES value in the config.json file
+# The necessary templates are available in the Templates folder, you can save them in your prefer directory, and change the value  of CONFILES in the config.json file
 
 #Examples
 
