@@ -1,0 +1,3 @@
+﻿networkname,ipaddress,prefix,dynamic
+test1,201.191.51.125,32,FALSE
+test2,201.191.51.126,32,FALSE
