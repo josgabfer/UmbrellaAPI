@@ -22,14 +22,14 @@ def postItems(token_type, url, payload = {}):
     config = dotenv_values(find_dotenv())
     env_token_type = token_type + '_TOKEN'
     token = config.get(env_token_type)
-    headers = {
-    'Authorization': 'Bearer ' + token,
-    "Content-Type": "application/json"
-    }
     if (token == None):
         print(colored("Token does not exists. Creating a new token", "red"))
         token = (generate_auth_string(token_type))
         print(token)
+    headers = {
+    'Authorization': 'Bearer ' + token,
+    "Content-Type": "application/json"
+    }
     print(colored(f"Contacting API: {url}", 'green'))
     response = requests.post(url, headers = headers, data = payload)
     try:
