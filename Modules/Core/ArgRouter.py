@@ -16,6 +16,7 @@ from Modules.Deployments.list_networkDevices import get_networkDevices
 from Modules.Deployments.list_va import get_vas
 from Modules.Deployments.create_tunnels import create_tunnels
 from Modules.Deployments.create_internalDomains import create_domains
+from Modules.Deployments.create_internalNetworks import create_internal_networks
 from Modules.Deployments.list_roamingComputers import get_roamingComputers
 from Modules.Deployments.list_policies import get_policies
 
@@ -149,6 +150,8 @@ def argument_router(args):
                 create_tunnels(args.profile)
             if args.domains:
                 create_domains(args.profile)
+            if args.internalNetworks:
+                create_internal_networks(args.profile)
         if args.policies:
              create_domains("Test List Policies")
         if args.reports:

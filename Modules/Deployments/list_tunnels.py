@@ -26,7 +26,7 @@ def get_tunnels(token_type):
     try:
         url = "https://api.umbrella.com/deployments/v2/tunnels"
         param = {
-            "status": "DOWN"
+            "includeState": "True"
         }
         tunnels_json = get_request(token_type, url, param)
         if (tunnels_json != None):
@@ -45,6 +45,8 @@ def parse_tunnels(tunnels_json):
                 for delete in delete_columns:
                     tunnels_json[item].pop(delete)
         tunnel_list = pandas.DataFrame(tunnels_json)
+        # print(tunnel_list)
+        # print(tunnel_list['meta.state.status'])
         fileType = "REPORTFILES"
         path = getPath(fileType)
         tunnel_list.to_csv(path + file_name, index=False)
