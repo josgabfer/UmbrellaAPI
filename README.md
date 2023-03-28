@@ -95,6 +95,15 @@ python UmbrellaAPI.py -D -l -r -p {Profile-Name}
 # -r is the roaming computers argument
 # -p is the API profile (Optional).
 
+# Request a list of sites
+python UmbrellaAPI.py -D -l -st -p {Profile-Name}
+
+# The tool requires specific options to get the data
+# -D seeks the Deployment API
+# -l is the list action operator
+# -st is the sites operator
+# -p is the API profile (Optional).
+
 # Creating
 
 # Create Tunnels from a file:
@@ -113,6 +122,15 @@ python UmbrellaAPI.py -D -c -id -p <profile>
 # -c is the create action operator.
 # -id is the internal domains argument
 # -p is the API profile (Optional).
+
+# Create Internal Networks from a file:
+
+python UmbrellaAPI.py -D -c -in -p <profile>
+
+# -c is the create action operator.
+# -in is the internal networks argument
+# -p is the API profile (Optional).
+# When creating internal networks, make sure you have the site ID, tunnel ID, or Network ID, you can use the list -l argument to get this information.
 
 ```
 
