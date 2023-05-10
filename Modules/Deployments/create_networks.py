@@ -1,15 +1,11 @@
-from ..Auth.getToken import generate_auth_string
 import datetime 
-from dotenv import dotenv_values, find_dotenv
 from ..Core.csvToJson import csvToJson
 from ..Core.post import postItems
-import requests
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
 from ..Core.getPath import getPath
 import logging
-import csv
 import json
 
 
@@ -48,7 +44,6 @@ def writeNetworkAttributes(response, network, lines):
     line = str(networkName) +','+ str(ipAddress) +','+ str(prefixLength) +','+ str(isDynamic) +','+ str(originID) +','+ str(status) +','+ str(error) + ','+ str(message) + ',' + str(networkCreatedAt) +'\n'
     lines.append(line)
     return lines
-#lines = ['networkname, ipaddress, prefix, dynamic, originID, status, error, networkCreatedAt\n']
 
 def create_networks(token_type):
 

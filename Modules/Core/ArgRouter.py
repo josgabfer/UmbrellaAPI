@@ -7,7 +7,7 @@ import hashlib
 import dotenv
 import json
 from termcolor import colored
-from Modules.Deployments.list_tunnels import  get_tunnels
+from Modules.Deployments.list_tunnels import get_tunnels
 from Modules.Deployments.list_internalDomains import get_internalDomains
 from Modules.Deployments.list_networks import get_networks
 from Modules.Deployments.list_sites import get_sites
@@ -19,7 +19,7 @@ from Modules.Deployments.create_internalDomains import create_domains
 from Modules.Deployments.create_internalNetworks import create_internal_networks
 from Modules.Deployments.list_roamingComputers import get_roamingComputers
 from Modules.Deployments.list_policies import get_policies
-
+from Modules.Policies.create_destination_list import create_destination_lists
 
 
 def setPassword():
@@ -29,16 +29,17 @@ def setPassword():
     p = getpass('Enter your password:\n')
     p2 = getpass('Re-enter your password:\n')
     if not p == p2:
-        print(colored('Passwords do not match, please try again\n','red'))
-        count =+ 1
+        print(colored('Passwords do not match, please try again\n', 'red'))
+        count = + 1
         if count == 5:
-            print(colored('Exiting...','red'))
+            print(colored('Exiting...', 'red'))
             exit()
         setPassword()
     else:
         password = salt + p
         hashed = hashlib.md5(password.encode())
         return hashed
+
 
 def checkPassword(profile):
     """Checks if the profile entered uses a password or not, if it has a password
@@ -48,7 +49,7 @@ def checkPassword(profile):
     config = dotenv_values()
 
     profile = profile + '_PASSW'
-    
+
     if profile in config:
         p = getpass('Enter the password \n')
         salt = "IamyourFath3r"
@@ -77,11 +78,11 @@ def setup(args):
     if args.config:
         config = dotenv_values()
         res = [val for key, val in config.items() if 'PROFILE' in key]
-        print(colored('+++++++Profiles+++++++','green'))
+        print(colored('+++++++Profiles+++++++', 'green'))
         for val in res:
             print('Profile: ', val)
         res = [val for key, val in config.items() if 'PATH' in key]
-        print(colored('+++++++Paths+++++++','green'))
+        print(colored('+++++++Paths+++++++', 'green'))
 
         for val in res:
             print('Path: ', val)
@@ -90,7 +91,8 @@ def setup(args):
         if args.path:
             dotenv.set_key(dotenv_file, 'PATH', args.path)
     else:
-        question = input("Would you like to protect this profile with a password?\n Y?\n N?\n")
+        question = input(
+            "Would you like to protect this profile with a password?\n Y?\n N?\n")
         if question == 'Y' or question == 'y':
             key_name = args.name + '_KEY'
             secret_name = args.name + '_SECRET'
@@ -101,7 +103,7 @@ def setup(args):
             dotenv.set_key(dotenv_file, key_name, args.key)
             dotenv.set_key(dotenv_file, secret_name, args.secret)
             dotenv.set_key(dotenv_file, creds_name, passw.hexdigest())
-            print(colored('Succesfully created a new protected profile','green'))
+            print(colored('Succesfully created a new protected profile', 'green'))
         else:
             key_name = args.name + '_KEY'
             secret_name = args.name + '_SECRET'
@@ -110,41 +112,40 @@ def setup(args):
             dotenv.set_key(dotenv_file, profile_name, args.name)
             dotenv.set_key(dotenv_file, key_name, args.key)
             dotenv.set_key(dotenv_file, secret_name, args.secret)
-            print(colored('Succesfully created a new profile','green'))
-
+            print(colored('Succesfully created a new profile', 'green'))
 
 
 def check_profile(profile):
     """This function will check if the profile exists or not, depending on what is entered by the user"""
     dotenv.load_dotenv()
     config = dotenv_values()
-    
+
     if profile in config.values():
         return True
     else:
         return False
 
 
-
 def argument_router(args):
     """This function will read the arguments entered, and redirect to any given module as required"""
     if not args.setup:
         if args.profile == None:
-            with open ("config.json","r") as file:
+            with open("config.json", "r") as file:
                 config = json.load(file)
-            jsondumpsprofile = json.dumps(json.dumps(config['DEFAULT_PROFILE']))
+            jsondumpsprofile = json.dumps(
+                json.dumps(config['DEFAULT_PROFILE']))
             jsonloadprofile = json.loads(jsondumpsprofile)
-            cleandata = jsonloadprofile.replace('"','')
+            cleandata = jsonloadprofile.replace('"', '')
             args.profile = cleandata
         if not checkPassword(args.profile):
             print(colored('Wrong password, please try again', 'red'))
             exit()
-        
+
     if args.create:
         if args.auth:
             print(colored('Test Create Authentication API', 'yellow'))
         if args.admin:
-             print(colored('Test Create Admin API', 'yellow'))
+            print(colored('Test Create Admin API', 'yellow'))
         if args.deployments:
             if args.tunnel:
                 create_tunnels(args.profile)
@@ -153,12 +154,12 @@ def argument_router(args):
             if args.internalNetworks:
                 create_internal_networks(args.profile)
         if args.policies:
-             create_domains("Test List Policies")
+            create_destination_lists(args.profile)
         if args.reports:
-             print(colored('Test Create Reports API', 'yellow'))
+            print(colored('Test Create Reports API', 'yellow'))
     elif args.list:
         if args.auth:
-             print(colored('Test List Authentication API', 'yellow'))
+            print(colored('Test List Authentication API', 'yellow'))
         if args.admin:
             print(colored('Test List Admin API', 'yellow'))
         if args.deployments:
@@ -182,8 +183,8 @@ def argument_router(args):
                 get_policies(args.profile)
             if args.domains:
                 get_internalDomains(args.profile)
-                
-        #if args.policies:
+
+        # if args.policies:
         #    print(colored('Test List Policies API', 'yellow'))
         if args.reports:
             print(colored('Test List Reports API', 'yellow'))
@@ -212,4 +213,5 @@ def argument_router(args):
     elif args.setup:
         setup(args)
     else:
-        print(colored('Argument not recognize, use "UmbrellaAPI.py -h" for more information','yellow'))
+        print(colored(
+            'Argument not recognize, use "UmbrellaAPI.py -h" for more information', 'yellow'))
