@@ -154,7 +154,7 @@ def argument_router(args):
             if args.internalNetworks:
                 create_internal_networks(args.profile)
         if args.policies:
-            create_destination_lists(args.profile)
+            create_destination_lists(args.profile, args.xml)
         if args.reports:
             print(colored('Test Create Reports API', 'yellow'))
     elif args.list:

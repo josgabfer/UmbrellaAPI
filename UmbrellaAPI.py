@@ -67,6 +67,9 @@ def main():
                              help='This value tells the program what profile to use, if not entered, the system will use the default profile')
     setup_group.add_argument('-Co', '--config', action='store_true',
                              help='The config argument let\'s you see the configured profiles and paths saved into the .env file')
+    switch_group = parser.add_argument_group('switch')
+    switch_group.add_argument('-x', '--xml', action='store_true',
+                              help='The xml switch can be used to read an XML file instead of a default CSV file while creating destination lists')
 
     module_group = parser.add_mutually_exclusive_group(required=True)
     module_group.add_argument('-AU', '--auth', action='store_true',

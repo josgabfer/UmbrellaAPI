@@ -1,15 +1,11 @@
-from ..Auth.getToken import generate_auth_string
-import datetime 
-from dotenv import dotenv_values, find_dotenv
+import datetime
 from ..Core.csvToJson import csvToJson
-import requests
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
 from ..Core.getPath import getPath
 from ..Core.post import postItems
 import logging
-import csv
 import json
 import datetime
 
@@ -52,9 +48,12 @@ def writeDomainAttributes(response, lines):
     statusCode = 'NA' if status == 200 else status
     error = 'NA' if status == 200 else data['error']
     message = 'NA' if status == 200 else data['message']
-    line = str(id) + ',' + domain + ',' + description + ',' + createdAt + ',' + modifiedAt + ',' + str(includeAllMobileDevices) + ',' + str(includeAllVAs) + ',' + str(statusCode) + ',' + error + ',' + message + '\n'
+    line = str(id) + ',' + domain + ',' + description + ',' + createdAt + ',' + modifiedAt + ',' + \
+        str(includeAllMobileDevices) + ',' + str(includeAllVAs) + \
+        ',' + str(statusCode) + ',' + error + ',' + message + '\n'
     lines.append(line)
     return lines
+
 
 def create_domains(token_type):
 
@@ -65,21 +64,20 @@ def create_domains(token_type):
 
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
         domains = csvToJson(domain_list)
-        print(colored(domains,'green'))
+        print(colored(domains, 'green'))
         for domain in domains:
             payload = json.dumps({
-            "description": domain["description"],
-            "domain": domain["domain"],
-            "includeAllVAs": domain["includeAllMobileDevices"],
-            "includeAllMobileDevices": domain["includeAllVAs"]
+                "description": domain["description"],
+                "domain": domain["domain"],
+                "includeAllVAs": domain["includeAllMobileDevices"],
+                "includeAllMobileDevices": domain["includeAllVAs"]
             })
-            print(colored('Adding Domain: ' + domain['domain'],'green'))
+            print(colored('Adding Domain: ' + domain['domain'], 'green'))
             response = postItems(token_type, url, payload)
             writeDomainAttributes(response, lines)
         print(colored(f"Log file created in: {logfile}", "yellow"))
         logFile.writelines(lines)
-    
 
 
-if __name__  == "__main__":
+if __name__ == "__main__":
     create_domains("")

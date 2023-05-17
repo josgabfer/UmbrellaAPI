@@ -7,6 +7,8 @@ import http.client as http_client
 from ..Core.getPath import getPath
 import logging
 import json
+import re
+import xml.etree.ElementTree as ET
 
 
 http_client.HTTPConnection.debuglevel = 1
@@ -18,8 +20,13 @@ requests_log.propagate = True
 
 
 # Script variables, must not be changed
+destination_list_xml = getPath("CONFILES") + 'destlistsinfo.xml'
+destination_list_csv = getPath("CONFILES") + 'destlistsinfo.csv'
+url = "https://api.umbrella.com/policies/v2/destinationlists"
 date = datetime.datetime.now()
 timestamp = date.strftime('_%Y_%m_%d_%H_%M')
+logfile = getPath("LOGFILES") + 'CREATE_DESTINATION_LIST' + \
+    str(timestamp) + ".csv"
 lines = ['id,organizationId,access,isGlobal,name,status,thirdpartyCategoryId,isMspDefault,markedForDeletion,bundleTypeId,meta_destination_count,createdAt,modifiedAt\n']
 """
 User variables - can be changed
@@ -57,15 +64,44 @@ def writeDestListAttributes(response, destinations, lines):
     return lines
 
 
-def create_destination_lists(token_type):
-    print("entra")
-    destination_list = getPath("CONFILES") + 'destlistsinfo.csv'
-    logfile = getPath("LOGFILES") + 'CREATE_DESTINATION_LIST' + \
-        str(timestamp) + ".csv"
-    url = "https://api.umbrella.com/policies/v2/destinationlists"
-
+def xml_parser(token_type):
+    dest_lists_tree = ET.parse(destination_list_xml)
+    category_name = ''
+    category_destinations = {}
     with open(str(logfile), 'w', encoding='utf-8') as logFile:
-        destlists = csvToJson(destination_list)
+        for categories in dest_lists_tree.findall('.//wga_config/prox_acl_custom_categories/prox_acl_custom_category'):
+            for category in categories:
+                if (category.tag == 'prox_acl_custom_category_name'):
+                    category_name = category.text
+                if (category.tag == 'prox_acl_custom_category_servers'):
+                    for destination in category:
+                        if (re.search("^\.", destination.text)):
+                            clean_str = re.sub(r"^.", "", destination.text)
+                            category_destinations["comment"] = ''
+                            category_destinations["destination"] = clean_str
+                            category_destinations["type"] = ''
+                        else:
+                            category_destinations["comment"] = ''
+                            category_destinations["destination"] = category.text
+                            category_destinations["type"] = ''
+
+            payload = json.dumps({
+                "bundleTypeId": 2,
+                "access": 'allow',
+                "name": category_name,
+                "destinations": [category_destinations],
+                "isGlobal": False
+            })
+            response = postItems(token_type, url, payload)
+            print(response.text.encode('utf8'))
+            writeDestListAttributes(response, dest_lists_tree, lines)
+            print(colored(f"Log file created in: {logfile}", "yellow"))
+            logFile.writelines(lines)
+
+
+def csv_parser(token_type):
+    with open(str(logfile), 'w', encoding='utf-8') as logFile:
+        destlists = csvToJson(destination_list_csv)
         for destinations in destlists:
             isGlobal = False if destinations['isGlobal'] == 'false' or 'False' else True
             payload = json.dumps({
@@ -79,12 +115,18 @@ def create_destination_lists(token_type):
                 }],
                 "isGlobal": isGlobal
             })
-            print(colored('Adding Destination List: ' +
-                  destinations['name'], 'green'))
+        print(colored('Adding Destination List: ' +
+                      destinations['name'], 'green'))
 
-            print(payload)
-            response = postItems(token_type, url, payload)
-            print(response.text.encode('utf8'))
-            writeDestListAttributes(response, destinations, lines)
+        response = postItems(token_type, url, payload)
+        print(response.text.encode('utf8'))
+        writeDestListAttributes(response, destinations, lines)
         print(colored(f"Log file created in: {logfile}", "yellow"))
         logFile.writelines(lines)
+
+
+def create_destination_lists(token_type, switch):
+    if switch == True:
+        xml_parser(token_type)
+    else:
+        csv_parser(token_type)
