@@ -6,7 +6,7 @@ from termcolor import colored
 import http.client as http_client
 from ..Core.getPath import getPath
 import csv
-from .get_destinations import get_destinations
+import json
 import logging
 
 http_client.HTTPConnection.debuglevel = 1
@@ -20,13 +20,15 @@ requests_log.propagate = True
 path            : Location where the file will be saved. Must end with '\\'
 file_name       : By default the script will use the next Format: destination_list_<year>-<month>-<day>-<hour>-<minute>.csv
 entry_limit     : Integer value, here we specify the number of records to be saved in the CSV file."""
-file_name = f'destination_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 entry_limit = 100
 
 
-def get_destination_lists(token_type):
+def get_destinations(token_type, data):
     try:
-        url = "https://api.umbrella.com/policies/v2/destinationlists"
+        url = f"https://api.umbrella.com/policies/v2/destinationlists/{data[0]}/destinations"
+        file_name = f'destination_list_{data[1]}_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
+
+        print(url)
         param = {
             "limit": entry_limit
         }
@@ -35,10 +37,8 @@ def get_destination_lists(token_type):
         response = get_request(token_type, url, param)
         data = []
         if (response != None):
-            for item in response['data']:
-                data_to_append = item['id'], item['name']
-                data.append(data_to_append)
-                get_destinations(token_type, data_to_append)
+            dest_list = pandas.DataFrame(response['data'])
+            dest_list.to_csv(path + file_name, index=False)
         print(
             colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
