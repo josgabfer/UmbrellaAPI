@@ -20,6 +20,8 @@ from Modules.Deployments.create_internalNetworks import create_internal_networks
 from Modules.Deployments.list_roamingComputers import get_roamingComputers
 from Modules.Deployments.list_policies import get_policies
 from Modules.Policies.create_destination_list import create_destination_lists
+from Modules.Policies.list_destination_lists import get_destination_lists
+from Modules.Reports.list_activity_proxy import get_activity_proxy
 
 
 def setPassword():
@@ -183,11 +185,16 @@ def argument_router(args):
                 get_policies(args.profile)
             if args.domains:
                 get_internalDomains(args.profile)
-
-        # if args.policies:
-        #    print(colored('Test List Policies API', 'yellow'))
+        if args.policies:
+            if args.destination:
+                get_destination_lists(args.profile)
+            else:
+                get_policies(args.profile)
         if args.reports:
             print(colored('Test List Reports API', 'yellow'))
+            if args.activity:
+                get_activity_proxy(args.profile)
+
     elif args.update:
         if args.auth:
             print(colored('Test Update Authentication API', 'yellow'))

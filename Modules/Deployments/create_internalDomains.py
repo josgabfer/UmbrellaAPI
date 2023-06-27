@@ -32,26 +32,30 @@ tunnels_list    : Location and name of the CSV file that contains the informatio
 
 
 def writeDomainAttributes(response, lines):
-    if response == None or response == '':
-        print(colored('None or empty string response detected'))
-        exit()
-    else:
-        data = json.loads((response.text))
-    status = response.status_code
-    id = data['id'] if status == 200 else 'NA'
-    domain = data['domain'] if status == 200 else 'NA'
-    description = data['description'] if status == 200 else 'NA'
-    createdAt = data['createdAt'] if status == 200 else 'NA'
-    modifiedAt = data['modifiedAt'] if status == 200 else 'NA'
-    includeAllVAs = data['includeAllVAs'] if status == 200 else 'NA'
-    includeAllMobileDevices = data['includeAllMobileDevices'] if status == 200 else 'NA'
-    statusCode = 'NA' if status == 200 else status
-    error = 'NA' if status == 200 else data['error']
-    message = 'NA' if status == 200 else data['message']
-    line = str(id) + ',' + domain + ',' + description + ',' + createdAt + ',' + modifiedAt + ',' + \
-        str(includeAllMobileDevices) + ',' + str(includeAllVAs) + \
-        ',' + str(statusCode) + ',' + error + ',' + message + '\n'
-    lines.append(line)
+    try:
+
+        if response == None or response == '':
+            print(colored('None or empty string response detected'))
+            exit()
+        else:
+            data = json.loads((response.text))
+        status = response.status_code
+        id = data['id'] if status == 200 else 'NA'
+        domain = data['domain'] if status == 200 else 'NA'
+        description = data['description'] if status == 200 else 'NA'
+        createdAt = data['createdAt'] if status == 200 else 'NA'
+        modifiedAt = data['modifiedAt'] if status == 200 else 'NA'
+        includeAllVAs = data['includeAllVAs'] if status == 200 else 'NA'
+        includeAllMobileDevices = data['includeAllMobileDevices'] if status == 200 else 'NA'
+        statusCode = 'NA' if status == 200 else status
+        error = 'NA' if status == 200 else data['error']
+        message = 'NA' if status == 200 else data['message']
+        line = str(id) + ',' + domain + ',' + description + ',' + createdAt + ',' + modifiedAt + ',' + \
+            str(includeAllMobileDevices) + ',' + str(includeAllVAs) + \
+            ',' + str(statusCode) + ',' + error + ',' + message + '\n'
+        lines.append(line)
+    except Exception as error:
+        print(colored(error, 'red'))
     return lines
 
 

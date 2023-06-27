@@ -114,6 +114,8 @@ def main():
                                   help='The virtual appliances operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
     deployment_group.add_argument('-nd', '--networkDevices', action='store_true',
                                   help='The network devices operator, it should be used with the Auth, Admin, Deoployment, Policies or Reports module')
+    deployment_group.add_argument('-Ac', '--activity', action='store_true',
+                                  help='The activity report operator, it should be used with the Reports module')
     deployment_group.add_argument(
         '-Te', '--test', action='store_true', help='test')
     args = parser.parse_args()

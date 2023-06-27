@@ -1,6 +1,6 @@
 from ..Core.get import get_request
-import datetime 
-import pandas 
+import datetime
+import pandas
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
@@ -21,6 +21,7 @@ entry_limit     : Integer value, here we specify the number of records to be sav
 file_name = f'internal_networks_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 entry_limit = 100
 
+
 def get_internalNetworks(token_type):
     try:
         url = "https://api.umbrella.com/deployments/v2/internalnetworks"
@@ -33,10 +34,10 @@ def get_internalNetworks(token_type):
         if (internalNetworks_json != None):
             internalNetworks_list = pandas.DataFrame(internalNetworks_json)
             internalNetworks_list.to_csv(path + file_name, index=False)
-            print(colored(f"Success! {file_name} created and stored in {path}", "green"))
+            print(
+                colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
-        print(colored(f'HTPP error occured: {httperr}','red'))
+        print(colored(f'HTPP error occured: {httperr}', 'red'))
 
     except Exception as e:
-        print(colored(f'HTPP error occured: {e}','red'))
-
+        print(colored(f'HTPP error occured: {e}', 'red'))

@@ -1,11 +1,11 @@
+from ..Core.get import get_request
 import datetime
 import pandas
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
-import logging
 from ..Core.getPath import getPath
-from ..Core.get import get_request
+import logging
 
 http_client.HTTPConnection.debuglevel = 1
 logging.basicConfig()
@@ -16,24 +16,27 @@ requests_log.propagate = True
 
 """User variables - can be changed
 path            : Location where the file will be saved. Must end with '\\'
-file_name       : By default the script will use the next Format: networks_list_<year>-<month>-<day>-<hour>-<minute>.csv
+file_name       : By default the script will use the next Format: destination_list_<year>-<month>-<day>-<hour>-<minute>.csv
 entry_limit     : Integer value, here we specify the number of records to be saved in the CSV file."""
-file_name = f'roaming_computers_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
+file_name = f'policy_list_{datetime.datetime.now().strftime("%Y-%m-%d-%H-%M")}' + '.csv'
 entry_limit = 100
 
 
-def get_roamingComputers(token_type):
+def get_activity_proxy(token_type):
     try:
-        url = "https://api.umbrella.com/deployments/v2/roamingcomputers"
+        url = "https://api.umbrella.com/reports/v2/activity/proxy"
         param = {
+            'from': '-1days',
+            'to': 'now',
             "limit": entry_limit
         }
         fileType = "REPORTFILES"
         path = getPath(fileType)
-        sites_json = get_request(token_type, url, param)
-        if (sites_json != None):
-            sites_list = pandas.DataFrame(sites_json)
-            sites_list.to_csv(path + file_name, index=False)
+        policy_list_json = get_request(token_type, url, param)
+        if (policy_list_json != None):
+            print(policy_list_json)
+            # policy_list = pandas.DataFrame(policy_list_json)
+            # policy_list.to_csv(path + file_name, index=False)
             print(
                 colored(f"Success! {file_name} created and stored in {path}", "green"))
     except HTTPError as httperr:
