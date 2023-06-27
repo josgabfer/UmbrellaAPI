@@ -35,7 +35,7 @@ def get_destination_lists(token_type):
         response = get_request(token_type, url, param)
         data = []
         if (response != None):
-            dest_list = pandas.DataFrame(response['meta'])
+            dest_list = pandas.DataFrame(response['data'])
             dest_list.to_csv(path + file_name, index=False)
         print(
             colored(f"Success! {file_name} created and stored in {path}", "green"))
