@@ -20,7 +20,6 @@ This program is divided into 5 different modules:
 
 5- Reports Module:  To programmatically read and audit real-time security information about your networks and systems -->
 
-
 ## Installation
 
 <!-- Use git to clone the program to your machine -->
@@ -55,7 +54,7 @@ Windows: python UmbrellaAPI.py
 
 Mac: python3 UmbrellaAPI.py
 
-# The Umbrella API uses two files in order to execute its functions, the config.json and the .env file, 
+# The Umbrella API uses two files in order to execute its functions, the config.json and the .env file,
 
 # config.json: This file contains information such as:
 # DEFAULT_PROFILE: The profile that will be used if no other profile is executed during runtime.
@@ -63,7 +62,7 @@ Mac: python3 UmbrellaAPI.py
 
 
 
-# CONFILES: Contains the PATH variable, the information in here will be the path where the configuration files are located, configuration files may include informatio for internal domain creation, IPsec tunnel creation, etc. 
+# CONFILES: Contains the PATH variable, the information in here will be the path where the configuration files are located, configuration files may include informatio for internal domain creation, IPsec tunnel creation, etc.
 
 # We do recommend creating a directory for your configuration files, and for the logfiles
 
@@ -77,36 +76,52 @@ Mac: python3 UmbrellaAPI.py
 
 #Examples
 
-# Use help to check the argument options 
+# Use help to check the argument options
 python UmbrellaAPI.py -h
 
 # Create a new UmbrellaAPI Profile (This will create an .env file with the required credentials to create an OAuth 2.0 token. Optional protected profiles can be created.
-python UmbrellaAPI.py -S -n {Profile-Name} -k {API Key} -s {API Secret}
+python UmbrellaAPI.py -S -n <profile> -k <API Key> -s < API Secret>
 
 
 # Listing
 
-# Request a list of roaming computers
-python UmbrellaAPI.py -D -l -r -p {Profile-Name}
 
 # The tool requires specific options to get the data
 # -D seeks the Deployment API
 # -l is the list action operator
 # -r is the roaming computers argument
-# -p is the API profile (Optional).
+    # -p is the API profile (Optional).
+
+# Request a list of roaming computers
+python UmbrellaAPI.py -D -l -r -p <profile>
 
 # Request a list of sites
-python UmbrellaAPI.py -D -l -st -p {Profile-Name}
+python UmbrellaAPI.py -D -l -st -p <profile>
 
-# The tool requires specific options to get the data
-# -D seeks the Deployment API
-# -l is the list action operator
-# -st is the sites operator
-# -p is the API profile (Optional).
+# Request internal domains
+python UmbrellaAPI.py -D -l -id -p <profile>
+
+# Request internal networks:
+python UmbrellaAPI.py -D -l -in -p <profile>
+
+# Request network devices:
+python UmbrellaAPI.py -D -l -nd -p <profile>
+
+# Request networks:
+python UmbrellaAPI.py -D -l -nw -p <profile>
+
+# Request all policies:
+python UmbrellaAPI.py -Po -l <profile>
+
+# Request tunnels:
+python UmbrellaAPI.py -D -l -t <profile>
+
+# Request Virtual Appliances:
+python UmbrellaAPI.py -D -l -va <profile>
 
 # Creating
 
-# Create Tunnels from a file:
+# To create tunnels from a file, use the included templates in the 'Templates' directory, populate the required information, and once is ready run the command:
 
 python UmbrellaAPI.py -D -c -t -p <profile>
 
@@ -116,28 +131,45 @@ python UmbrellaAPI.py -D -c -t -p <profile>
 
 
 # Create Internal Domains from a file:
-
 python UmbrellaAPI.py -D -c -id -p <profile>
 
-# -c is the create action operator.
-# -id is the internal domains argument
-# -p is the API profile (Optional).
 
 # Create Internal Networks from a file:
-
 python UmbrellaAPI.py -D -c -in -p <profile>
 
-# -c is the create action operator.
-# -in is the internal networks argument
-# -p is the API profile (Optional).
 # When creating internal networks, make sure you have the site ID, tunnel ID, or Network ID, you can use the list -l argument to get this information.
+
+# Create destination lists:
+# When creating destination lists use the included templates in the 'Templates folder'.
+# 1- First use the destlisinfo.csv to enter the name of the destination list, and the type ([1] DNS, [2] Web). When creating a DNS destination list, enter the action ('Allow' or 'Block'). When creating a Web destination list, you can just enter' Allow' as the action is irrelevant.
+
+# 2- After you have created the destlistinfo.csv, modify the name of the destinations_name.csv by replacing the word 'name' with the destination list entered in destlistinfo.csv, if there are more than one entries in destlistinfo.csv add as many destinations_name.csv as you need.
+
+# 3- Run the command:
+python UmbrellaAPI.py -Po -c -dl -p <profile>
+
+# WSA custom URL migration
+# If you have WSA and wish to migrate your custom URLs to Umbrella SIG, export your configuration file to xml: https://www.cisco.com/c/en/us/td/docs/security/wsa/wsa_12-0/user_guide/b_WSA_UserGuide_12_0/b_WSA_UserGuide_11_7_chapter_010110.html#task_1354146
+
+# Once you have the file exported, rename the file to destlistinfo.xml and place it in the same where all your configuration files are located, check your config.json to find this location.
+
+# After placing the destlistinfo.xml in your configuration directory, run the command:
+python3.10 UmbrellaAPI.py -Po -c -dl -x
+
+# In this case the -x argument will tell the script to find the xml file, and create the necessary documents to push the destination lists, you will see the destlistinfo.csv modified and other files that get created with the structure of destinations_[name].csv, where 'name' changes based on the custom URL name, you can open the files to make sure they are correct. Once ready just run the command:
+
+python3.10 UmbrellaAPI.py -Po -c -dl
+
+# Without the -x argument, the script will now push all the custom URLs to Umbrella as we destination lists.
 
 ```
 
 ## Contributing
+
 Pull requests are welcome. For major changes, please open an issue first to discuss what you would like to change.
 
 Please make sure to update tests as appropriate.
 
 ## License
+
 [MIT](https://choosealicense.com/licenses/mit/)

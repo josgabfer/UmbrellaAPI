@@ -1,11 +1,9 @@
 from ..Core.get import get_request
 import datetime
-import pandas
 from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
 from ..Core.getPath import getPath
-import csv
 from .get_destinations import get_destinations
 import logging
 

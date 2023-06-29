@@ -5,8 +5,7 @@ from requests.models import HTTPError
 from termcolor import colored
 import http.client as http_client
 from ..Core.getPath import getPath
-import csv
-import json
+
 import logging
 
 http_client.HTTPConnection.debuglevel = 1
